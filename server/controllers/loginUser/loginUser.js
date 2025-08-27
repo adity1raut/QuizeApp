@@ -37,7 +37,7 @@ const logoutUser = (req, res) => {
     res.status(200).json({ message: 'Logged out successfully.' });
 };
 
-module.exports = {
+export {
     loginUser,
     logoutUser,
 };

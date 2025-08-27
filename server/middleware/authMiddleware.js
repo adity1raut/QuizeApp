@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import User from "../models/UserSchema.js"
 
-const JWT_SECRET = process.env.JWT_SECRET ;
+const JWT_SECRET = process.env.JWT_SECRET || "araut@12" ;
 
 const protect = async (req, res, next) => {
     let token;
@@ -10,14 +10,11 @@ const protect = async (req, res, next) => {
 
     if (token) {
         try {
-            // Verify token
+ 
             const decoded = jwt.verify(token, JWT_SECRET);
-
-            // Get user from the token payload (excluding the password)
-            // and attach it to the request object
             req.user = await User.findById(decoded.user.id).select('-password');
             
-            next(); // Proceed to the next middleware or route handler
+            next(); 
         } catch (error) {
             console.error(error);
             return res.status(401).json({ message: 'Not authorized, token failed.' });
@@ -36,4 +33,4 @@ const admin = (req, res, next) => {
 };
 
 
-module.exports = { protect, admin };
+export { protect, admin };

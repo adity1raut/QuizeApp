@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET ;
+const JWT_SECRET = process.env.JWT_SECRET || "araut@12" ;
 
 const generateToken = (res, user) => {
     const payload = {
@@ -16,9 +16,9 @@ const generateToken = (res, user) => {
     res.cookie('token', token, {
         httpOnly: true, // Prevents client-side JS from accessing the cookie
         secure: process.env.NODE_ENV === 'development', // Use secure cookies in production
-        sameSite: 'strict', // Mitigates CSRF attacks
-        maxAge: 3600000 // 1 hour
+        sameSite: 'strict', 
+        maxAge: 3600000 
     });
 };
 
-module.exports = generateToken;
+export default generateToken;
