@@ -23,15 +23,14 @@ export const AuthProvider = ({ children }) => {
   const checkAuthStatus = async () => {
     try {
       const response = await axios.get('/api/auth/profile', {
-        withCredentials: true, 
+        withCredentials: true,
       });
-      
+
       if (response.data.user) {
         setUser(response.data.user);
         setIsAuthenticated(true);
       }
     } catch (error) {
-
       setUser(null);
       setIsAuthenticated(false);
     } finally {
@@ -45,7 +44,7 @@ export const AuthProvider = ({ children }) => {
         email,
         password,
       }, {
-        withCredentials: true, 
+        withCredentials: true,
       });
 
       if (response.data.user) {
@@ -55,13 +54,13 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       let errorMessage = 'Login failed. Please try again.';
-      
+
       if (error.response?.data?.message) {
         errorMessage = error.response.data.message;
       } else if (error.request) {
         errorMessage = 'Network error. Please check your connection.';
       }
-      
+
       return { success: false, message: errorMessage };
     }
   };
@@ -79,6 +78,22 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const isAdmin = () => {
+    return user?.role === 'Admin';
+  };
+
+  const isUser = () => {
+    return user?.role === 'User';
+  };
+
+  const hasRole = (role) => {
+    return user?.role === role;
+  };
+
+  const hasAnyRole = (roles) => {
+    return roles.includes(user?.role);
+  };
+
   const value = {
     user,
     isAuthenticated,
@@ -86,6 +101,10 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     checkAuthStatus,
+    isAdmin,
+    isUser,
+    hasRole,
+    hasAnyRole,
   };
 
   return (
