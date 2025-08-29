@@ -18,6 +18,8 @@ import Quiz from './pages/UserPage/Quiz';
 import Results from './pages/UserPage/Result';
 import Submissions from './pages/UserPage/Submissions';
 import SubmissionDetails from './pages/UserPage/SubmissionDetails';
+import QuizStatsPage from './pages/AdminPAge/QuizStatsPage';
+import ActiveQuizzesPage from './pages/UserPage/ActiveQuizzesPage';
 
 const HomePage = () => (
   <div className="p-8 text-center">
@@ -69,12 +71,28 @@ export default function App() {
                 </AdminRoute>
               }
             />
+             <Route
+              path="/admin/quiz/:quizId/stats"
+              element={
+                <AdminRoute>
+                  <QuizStatsPage />
+                </AdminRoute>
+              }
+            />
             <Route
               path="/admin/quiz/:quizId/questions"
               element={
                 <AdminRoute>
                   <QuestionsManagement />
                 </AdminRoute>
+              }
+            />
+            <Route
+              path="/quiz"
+              element={
+                <ProtectedRoute>
+                  <ActiveQuizzesPage/>
+                </ProtectedRoute>
               }
             />
             

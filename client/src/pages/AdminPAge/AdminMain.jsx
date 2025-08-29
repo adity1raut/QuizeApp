@@ -1,35 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {
-  Container,
-  Typography,
-  Box,
-  Paper,
-  Grid,
-  Card,
-  CardContent,
-  Button,
-  Chip,
-  IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  Snackbar,
-  Alert,
-  CircularProgress
-} from '@mui/material';
-import {
-  Add as AddIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-  Visibility as ViewIcon,
-  QuestionAnswer as QuestionsIcon,
-  BarChart as StatsIcon
-} from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext'; 
+import { useAuth } from '../../contexts/AuthContext';
+import {
+  Plus,
+  Edit3,
+  Trash2,
+  Eye,
+  HelpCircle,
+  BarChart3,
+  ChevronLeft,
+  ChevronRight,
+  X,
+  Check
+} from 'lucide-react';
 
 const AdminDashboard = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -47,7 +31,7 @@ const AdminDashboard = () => {
   });
 
   const navigate = useNavigate();
-  const { user, isAuthenticated, isAdmin, logout } = useAuth(); // Get auth info from context
+  const { user, isAuthenticated, isAdmin, logout } = useAuth();
 
   // Redirect if not authenticated or not admin
   useEffect(() => {
@@ -61,7 +45,7 @@ const AdminDashboard = () => {
     try {
       setLoading(true);
       const response = await axios.get(`/api/admin/quizzes?page=${page}`, {
-        withCredentials: true // Use cookies instead of token in header
+        withCredentials: true
       });
       
       setQuizzes(response.data.data.quizzes);
@@ -69,7 +53,6 @@ const AdminDashboard = () => {
       setError('');
     } catch (err) {
       if (err.response?.status === 401) {
-        // Unauthorized - redirect to login
         logout();
         navigate('/login');
       } else {
@@ -92,16 +75,15 @@ const AdminDashboard = () => {
       const response = await axios.post(
         `/api/admin/quiz`,
         newQuiz,
-        { withCredentials: true } // Use cookies instead of token in header
+        { withCredentials: true }
       );
       
       setSuccess('Quiz created successfully!');
       setCreateDialogOpen(false);
       setNewQuiz({ title: '', description: '' });
-      fetchQuizzes(); // Refresh the list
+      fetchQuizzes();
     } catch (err) {
       if (err.response?.status === 401) {
-        // Unauthorized - redirect to login
         logout();
         navigate('/login');
       } else {
@@ -116,14 +98,13 @@ const AdminDashboard = () => {
     
     try {
       await axios.delete(`/api/admin/quiz/${quizId}`, {
-        withCredentials: true // Use cookies instead of token in header
+        withCredentials: true
       });
       
       setSuccess('Quiz deleted successfully!');
-      fetchQuizzes(); // Refresh the list
+      fetchQuizzes();
     } catch (err) {
       if (err.response?.status === 401) {
-        // Unauthorized - redirect to login
         logout();
         navigate('/login');
       } else {
@@ -138,14 +119,13 @@ const AdminDashboard = () => {
       await axios.patch(
         `/api/admin/quiz/${quizId}/status`,
         { isActive: !currentStatus },
-        { withCredentials: true } // Use cookies instead of token in header
+        { withCredentials: true }
       );
       
       setSuccess(`Quiz ${!currentStatus ? 'activated' : 'deactivated'} successfully!`);
-      fetchQuizzes(); // Refresh the list
+      fetchQuizzes();
     } catch (err) {
       if (err.response?.status === 401) {
-        // Unauthorized - redirect to login
         logout();
         navigate('/login');
       } else {
@@ -156,180 +136,193 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <CircularProgress />
-      </Container>
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+      </div>
     );
   }
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h4" component="h1">
-          Quiz Management
-        </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Typography variant="body2">
-            Welcome, {user?.name}
-          </Typography>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() => setCreateDialogOpen(true)}
-          >
-            Create New Quiz
-          </Button>
-        </Box>
-      </Box>
+    <div className="min-h-screen bg-gray-900 text-gray-100">
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-white mb-4 sm:mb-0">Quiz Management</h1>
+          <div className="flex items-center space-x-4">
+            <span className="text-sm text-gray-400">Welcome, {user?.name}</span>
+            <button
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors"
+              onClick={() => setCreateDialogOpen(true)}
+            >
+              <Plus size={20} className="mr-2" />
+              Create New Quiz
+            </button>
+          </div>
+        </div>
 
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError('')}>
-          {error}
-        </Alert>
-      )}
-
-      {success && (
-        <Alert severity="success" sx={{ mb: 2 }} onClose={() => setSuccess('')}>
-          {success}
-        </Alert>
-      )}
-
-      <Grid container spacing={3}>
-        {quizzes.length === 0 ? (
-          <Grid item xs={12}>
-            <Paper sx={{ p: 3, textAlign: 'center' }}>
-              <Typography variant="h6">No quizzes found</Typography>
-              <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-                Create your first quiz to get started
-              </Typography>
-            </Paper>
-          </Grid>
-        ) : (
-          quizzes.map((quiz) => (
-            <Grid item xs={12} md={6} lg={4} key={quiz._id}>
-              <Card>
-                <CardContent>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-                    <Typography variant="h6" component="h2">
-                      {quiz.title}
-                    </Typography>
-                    <Chip
-                      label={quiz.isActive ? 'Active' : 'Inactive'}
-                      color={quiz.isActive ? 'success' : 'default'}
-                      size="small"
-                    />
-                  </Box>
-                  
-                  <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
-                    {quiz.description}
-                  </Typography>
-                  
-                  <Typography variant="body2" sx={{ mb: 2 }}>
-                    Questions: {quiz.questions?.length || 0}
-                  </Typography>
-                  
-                  <Typography variant="caption" color="textSecondary">
-                    Created: {new Date(quiz.createdAt).toLocaleDateString()}
-                  </Typography>
-                  
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-                    <IconButton
-                      size="small"
-                      onClick={() => navigate(`/admin/quiz/${quiz._id}`)}
-                    >
-                      <ViewIcon />
-                    </IconButton>
-                    
-                    <IconButton
-                      size="small"
-                      onClick={() => navigate(`/admin/quiz/${quiz._id}/questions`)}
-                    >
-                      <QuestionsIcon />
-                    </IconButton>
-                    
-                    <IconButton
-                      size="small"
-                      onClick={() => navigate(`/admin/quiz/${quiz._id}/stats`)}
-                    >
-                      <StatsIcon />
-                    </IconButton>
-                    
-                    <IconButton
-                      size="small"
-                      onClick={() => handleToggleStatus(quiz._id, quiz.isActive)}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    
-                    <IconButton
-                      size="small"
-                      onClick={() => handleDeleteQuiz(quiz._id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))
+        {error && (
+          <div className="bg-red-900/30 border border-red-700 text-red-200 px-4 py-3 rounded-lg mb-6 flex justify-between items-center">
+            <span>{error}</span>
+            <button onClick={() => setError('')}>
+              <X size={18} />
+            </button>
+          </div>
         )}
-      </Grid>
 
-      {/* Pagination */}
-      {pagination.totalPages > 1 && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-          <Button
-            disabled={!pagination.hasPrev}
-            onClick={() => fetchQuizzes(pagination.currentPage - 1)}
-          >
-            Previous
-          </Button>
-          
-          <Typography sx={{ mx: 2, alignSelf: 'center' }}>
-            Page {pagination.currentPage} of {pagination.totalPages}
-          </Typography>
-          
-          <Button
-            disabled={!pagination.hasNext}
-            onClick={() => fetchQuizzes(pagination.currentPage + 1)}
-          >
-            Next
-          </Button>
-        </Box>
-      )}
+        {success && (
+          <div className="bg-green-900/30 border border-green-700 text-green-200 px-4 py-3 rounded-lg mb-6 flex justify-between items-center">
+            <span>{success}</span>
+            <button onClick={() => setSuccess('')}>
+              <X size={18} />
+            </button>
+          </div>
+        )}
 
-      {/* Create Quiz Dialog */}
-      <Dialog open={createDialogOpen} onClose={() => setCreateDialogOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle>Create New Quiz</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Quiz Title"
-            fullWidth
-            variant="outlined"
-            value={newQuiz.title}
-            onChange={(e) => setNewQuiz({ ...newQuiz, title: e.target.value })}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            margin="dense"
-            label="Description"
-            fullWidth
-            multiline
-            rows={3}
-            variant="outlined"
-            value={newQuiz.description}
-            onChange={(e) => setNewQuiz({ ...newQuiz, description: e.target.value })}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setCreateDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleCreateQuiz} variant="contained">Create</Button>
-        </DialogActions>
-      </Dialog>
-    </Container>
+        {quizzes.length === 0 ? (
+          <div className="bg-gray-800 rounded-xl p-8 text-center">
+            <h2 className="text-xl font-semibold mb-2">No quizzes found</h2>
+            <p className="text-gray-400">Create your first quiz to get started</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {quizzes.map((quiz) => (
+              <div key={quiz._id} className="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-4">
+                    <h2 className="text-xl font-semibold text-white truncate max-w-[70%]">{quiz.title}</h2>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${quiz.isActive ? 'bg-green-900/30 text-green-400' : 'bg-gray-700 text-gray-400'}`}>
+                      {quiz.isActive ? 'Active' : 'Inactive'}
+                    </span>
+                  </div>
+                  
+                  <p className="text-gray-400 mb-4 line-clamp-2">{quiz.description}</p>
+                  
+                  <div className="flex justify-between text-sm mb-4">
+                    <span className="text-gray-300">Questions: {quiz.questions?.length || 0}</span>
+                    <span className="text-gray-500">Created: {new Date(quiz.createdAt).toLocaleDateString()}</span>
+                  </div>
+                  
+                  <div className="flex justify-between pt-4 border-t border-gray-700">
+                    <button
+                      className="text-blue-400 hover:text-blue-300 transition-colors p-1"
+                      onClick={() => navigate(`/admin/quiz/${quiz._id}`)}
+                      title="View"
+                    >
+                      <Eye size={20} />
+                    </button>
+                    
+                    <button
+                      className="text-purple-400 hover:text-purple-300 transition-colors p-1"
+                      onClick={() => navigate(`/admin/quiz/${quiz._id}/questions`)}
+                      title="Questions"
+                    >
+                      <HelpCircle size={20} />
+                    </button>
+                    
+                    <button
+                      className="text-yellow-400 hover:text-yellow-300 transition-colors p-1"
+                      onClick={() => navigate(`/admin/quiz/${quiz._id}/stats`)}
+                      title="Statistics"
+                    >
+                      <BarChart3 size={20} />
+                    </button>
+                    
+                    <button
+                      className="text-cyan-400 hover:text-cyan-300 transition-colors p-1"
+                      onClick={() => handleToggleStatus(quiz._id, quiz.isActive)}
+                      title="Toggle Status"
+                    >
+                      <Edit3 size={20} />
+                    </button>
+                    
+                    <button
+                      className="text-red-400 hover:text-red-300 transition-colors p-1"
+                      onClick={() => handleDeleteQuiz(quiz._id)}
+                      title="Delete"
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Pagination */}
+        {pagination.totalPages > 1 && (
+          <div className="flex justify-center items-center mt-8 space-x-4">
+            <button
+              disabled={!pagination.hasPrev}
+              onClick={() => fetchQuizzes(pagination.currentPage - 1)}
+              className={`flex items-center px-4 py-2 rounded-lg ${pagination.hasPrev ? 'bg-gray-800 hover:bg-gray-700 text-white' : 'bg-gray-800/50 text-gray-500 cursor-not-allowed'} transition-colors`}
+            >
+              <ChevronLeft size={18} className="mr-1" />
+              Previous
+            </button>
+            
+            <span className="text-gray-300">
+              Page {pagination.currentPage} of {pagination.totalPages}
+            </span>
+            
+            <button
+              disabled={!pagination.hasNext}
+              onClick={() => fetchQuizzes(pagination.currentPage + 1)}
+              className={`flex items-center px-4 py-2 rounded-lg ${pagination.hasNext ? 'bg-gray-800 hover:bg-gray-700 text-white' : 'bg-gray-800/50 text-gray-500 cursor-not-allowed'} transition-colors`}
+            >
+              Next
+              <ChevronRight size={18} className="ml-1" />
+            </button>
+          </div>
+        )}
+
+        {/* Create Quiz Dialog */}
+        {createDialogOpen && (
+          <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+            <div className="bg-gray-800 rounded-xl w-full max-w-md p-6">
+              <h2 className="text-xl font-semibold mb-4 text-white">Create New Quiz</h2>
+              
+              <div className="mb-4">
+                <label className="block text-gray-300 mb-2">Quiz Title</label>
+                <input
+                  type="text"
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  value={newQuiz.title}
+                  onChange={(e) => setNewQuiz({ ...newQuiz, title: e.target.value })}
+                  autoFocus
+                />
+              </div>
+              
+              <div className="mb-6">
+                <label className="block text-gray-300 mb-2">Description</label>
+                <textarea
+                  rows="3"
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  value={newQuiz.description}
+                  onChange={(e) => setNewQuiz({ ...newQuiz, description: e.target.value })}
+                ></textarea>
+              </div>
+              
+              <div className="flex justify-end space-x-3">
+                <button
+                  className="px-4 py-2 text-gray-300 hover:text-white transition-colors"
+                  onClick={() => setCreateDialogOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors"
+                  onClick={handleCreateQuiz}
+                >
+                  <Check size={18} className="mr-1" />
+                  Create
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
- 
+
 export default AdminDashboard;

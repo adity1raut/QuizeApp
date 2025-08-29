@@ -60,7 +60,6 @@ export const AuthProvider = ({ children }) => {
       } else if (error.request) {
         errorMessage = 'Network error. Please check your connection.';
       }
-
       return { success: false, message: errorMessage };
     }
   };

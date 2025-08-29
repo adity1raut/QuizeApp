@@ -1,7 +1,17 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { 
+  ArrowLeft, 
+  ArrowRight, 
+  CheckCircle, 
+  Circle, 
+  Clock, 
+  AlertCircle,
+  Loader2,
+  Send,
+  BarChart3
+} from 'lucide-react';
 
 const Quiz = () => {
   const { id } = useParams();
@@ -77,11 +87,10 @@ const Quiz = () => {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <div className="flex justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-          </div>
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 text-blue-500 animate-spin mx-auto" />
+          <p className="mt-4 text-gray-300">Loading quiz...</p>
         </div>
       </div>
     );
@@ -89,11 +98,16 @@ const Quiz = () => {
 
   if (error || !quiz) {
     return (
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          <div className="flex justify-center">
-            <div className="text-red-500">{error || 'Quiz not found'}</div>
-          </div>
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <AlertCircle className="h-12 w-12 text-red-500 mx-auto" />
+          <p className="mt-4 text-red-400 text-xl">{error || 'Quiz not found'}</p>
+          <button 
+            onClick={() => navigate('/')}
+            className="mt-6 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            Return Home
+          </button>
         </div>
       </div>
     );
@@ -103,54 +117,81 @@ const Quiz = () => {
   const progress = ((currentQuestion + 1) / quiz.questions.length) * 100;
 
   return (
-    <div className="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
-      <div className="px-4 py-6 sm:px-0">
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">{quiz.title}</h2>
-          <p className="text-gray-600">{quiz.description}</p>
+    <div className="min-h-screen bg-gray-900 text-gray-100 py-8 px-4">
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-8">
+          <button 
+            onClick={() => navigate(-1)}
+            className="flex items-center text-gray-400 hover:text-white transition-colors mb-4"
+          >
+            <ArrowLeft className="h-5 w-5 mr-1" />
+            Back
+          </button>
+          
+          <h1 className="text-3xl font-bold text-white mb-2">{quiz.title}</h1>
+          <p className="text-gray-400">{quiz.description}</p>
+          
+          <div className="flex items-center mt-4 text-gray-400 text-sm">
+            <Clock className="h-4 w-4 mr-1" />
+            <span>{quiz.questions.length} questions</span>
+          </div>
         </div>
 
         {/* Progress bar */}
-        <div className="mb-6">
-          <div className="flex justify-between mb-1">
-            <span className="text-sm font-medium text-gray-700">
+        <div className="mb-8">
+          <div className="flex justify-between mb-2">
+            <span className="text-sm font-medium text-gray-300">
               Question {currentQuestion + 1} of {quiz.questions.length}
             </span>
-            <span className="text-sm font-medium text-gray-700">
+            <span className="text-sm font-medium text-gray-300">
               {Math.round(progress)}%
             </span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2.5">
+          <div className="w-full bg-gray-700 rounded-full h-2.5">
             <div 
-              className="bg-blue-600 h-2.5 rounded-full" 
+              className="bg-blue-600 h-2.5 rounded-full transition-all duration-300" 
               style={{ width: `${progress}%` }}
             ></div>
           </div>
         </div>
 
         {/* Question */}
-        <div className="bg-white shadow rounded-lg p-6 mb-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
+        <div className="bg-gray-800 shadow-lg rounded-xl p-6 mb-8 border border-gray-700">
+          <h3 className="text-xl font-medium text-white mb-6 flex">
+            <span className="bg-blue-700 h-8 w-8 rounded-full flex items-center justify-center text-white mr-3 flex-shrink-0">
+              {currentQuestion + 1}
+            </span>
             {question.questionText}
           </h3>
           
           <div className="space-y-3">
             {question.options.map((option, index) => (
-              <div key={index} className="flex items-center">
+              <div 
+                key={index} 
+                className={`flex items-center p-4 rounded-lg cursor-pointer transition-all ${answers[question._id] === option 
+                  ? 'bg-blue-900 border-blue-500' 
+                  : 'bg-gray-700 hover:bg-gray-600 border-gray-600'}`}
+                onClick={() => handleAnswerSelect(question._id, option)}
+              >
+                {answers[question._id] === option ? (
+                  <CheckCircle className="h-5 w-5 text-blue-400 mr-3 flex-shrink-0" />
+                ) : (
+                  <Circle className="h-5 w-5 text-gray-400 mr-3 flex-shrink-0" />
+                )}
+                <label
+                  htmlFor={`option-${index}`}
+                  className="block text-gray-100 cursor-pointer select-none"
+                >
+                  {option}
+                </label>
                 <input
                   id={`option-${index}`}
                   name="answer"
                   type="radio"
-                  className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300"
+                  className="hidden"
                   checked={answers[question._id] === option}
                   onChange={() => handleAnswerSelect(question._id, option)}
                 />
-                <label
-                  htmlFor={`option-${index}`}
-                  className="ml-3 block text-sm font-medium text-gray-700"
-                >
-                  {option}
-                </label>
               </div>
             ))}
           </div>
@@ -161,38 +202,67 @@ const Quiz = () => {
           <button
             onClick={handlePrevious}
             disabled={currentQuestion === 0}
-            className={`px-4 py-2 rounded-md text-sm font-medium ${currentQuestion === 0 
-              ? 'bg-gray-200 text-gray-500 cursor-not-allowed' 
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+            className={`flex items-center px-4 py-3 rounded-md font-medium transition-colors ${currentQuestion === 0 
+              ? 'bg-gray-800 text-gray-500 cursor-not-allowed' 
+              : 'bg-gray-700 text-gray-200 hover:bg-gray-600'}`}
           >
+            <ArrowLeft className="h-4 w-4 mr-2" />
             Previous
           </button>
           
           {currentQuestion < quiz.questions.length - 1 ? (
             <button
               onClick={handleNext}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700"
+              className="flex items-center px-4 py-3 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors"
             >
               Next
+              <ArrowRight className="h-4 w-4 ml-2" />
             </button>
           ) : (
             <button
               onClick={handleSubmit}
               disabled={submitting || Object.keys(answers).length < quiz.questions.length}
-              className={`px-4 py-2 rounded-md text-sm font-medium ${submitting || Object.keys(answers).length < quiz.questions.length
-                ? 'bg-gray-200 text-gray-500 cursor-not-allowed' 
+              className={`flex items-center px-4 py-3 rounded-md font-medium transition-colors ${submitting || Object.keys(answers).length < quiz.questions.length
+                ? 'bg-gray-800 text-gray-500 cursor-not-allowed' 
                 : 'bg-green-600 text-white hover:bg-green-700'}`}
             >
-              {submitting ? 'Submitting...' : 'Submit Quiz'}
+              {submitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                <>
+                  <Send className="h-4 w-4 mr-2" />
+                  Submit Quiz
+                </>
+              )}
             </button>
           )}
         </div>
 
         {/* Answer status */}
-        <div className="mt-6">
-          <p className="text-sm text-gray-600">
-            Answered: {Object.keys(answers).length} / {quiz.questions.length} questions
-          </p>
+        <div className="mt-8 p-4 bg-gray-800 rounded-lg border border-gray-700">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center text-sm text-gray-300">
+              <BarChart3 className="h-4 w-4 mr-2" />
+              <span>Answered: {Object.keys(answers).length} of {quiz.questions.length} questions</span>
+            </div>
+            
+            <div className="flex space-x-1">
+              {quiz.questions.map((q, index) => (
+                <div 
+                  key={q._id}
+                  className={`h-2 w-2 rounded-full ${answers[q._id] 
+                    ? 'bg-green-400' 
+                    : index === currentQuestion 
+                      ? 'bg-blue-400' 
+                      : 'bg-gray-600'}`}
+                  title={index === currentQuestion ? 'Current question' : answers[q._id] ? 'Answered' : 'Not answered'}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

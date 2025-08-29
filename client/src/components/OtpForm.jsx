@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Spinner from './Spinner';
+import { ArrowLeft, Mail, ShieldCheck, RotateCcw } from 'lucide-react';
 
 const OtpForm = ({ email, onVerificationSuccess, setGlobalMessage, onGoBack }) => {
   const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isResending, setIsResending] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,47 +47,108 @@ const OtpForm = ({ email, onVerificationSuccess, setGlobalMessage, onGoBack }) =
     }
   };
 
+  const handleResendOtp = async () => {
+    setIsResending(true);
+    setGlobalMessage({ text: '', isError: false });
+    
+    try {
+      const response = await axios.post('/api/auth/resend-otp', { email });
+      setGlobalMessage({ 
+        text: response.data.message || 'New OTP sent to your email.', 
+        isError: false 
+      });
+    } catch (error) {
+      setGlobalMessage({ 
+        text: 'Failed to resend OTP. Please try again.', 
+        isError: true 
+      });
+    } finally {
+      setIsResending(false);
+    }
+  };
+
+  const handleOtpChange = (e) => {
+    const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+    setOtp(value);
+  };
+
   return (
-    <div>
-      <h2 className="text-2xl font-bold text-center text-gray-800">
-        Verify Your Email
-      </h2>
-      <p className="text-center text-gray-600 mt-2">
-        An OTP has been sent to <strong>{email}</strong>.
-      </p>
-      <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-        <div>
-          <label htmlFor="otpInput" className="text-sm font-medium text-gray-700">
-            Enter 6-Digit OTP
-          </label>
-          <input
-            id="otpInput"
-            name="otp"
-            type="text"
-            pattern="\d{6}"
-            maxLength="6"
-            required
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-            className="w-full px-3 py-2 mt-1 text-center text-lg tracking-[0.5em] border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-          />
+    <div className="bg-gray-900 text-gray-100 p-8 rounded-2xl shadow-xl w-full max-w-md border border-gray-800">
+      <div className="text-center mb-8">
+        <div className="flex justify-center mb-4">
+          <div className="bg-purple-600 p-3 rounded-full">
+            <ShieldCheck size={30} className="text-white" />
+          </div>
         </div>
+        <h2 className="text-2xl font-bold">Verify Your Email</h2>
+        <p className="text-gray-400 mt-2">
+          Enter the 6-digit code sent to your email
+        </p>
+      </div>
+
+      <div className="flex items-center justify-center p-3 mb-6 bg-gray-800 rounded-lg border border-gray-700">
+        <Mail size={16} className="text-blue-400 mr-2" />
+        <span className="text-sm font-medium text-gray-300">{email}</span>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="space-y-2">
+          <label htmlFor="otpInput" className="text-sm font-medium text-gray-300">
+            Verification Code
+          </label>
+          <div className="relative">
+            <input
+              id="otpInput"
+              name="otp"
+              type="text"
+              inputMode="numeric"
+              pattern="\d{6}"
+              maxLength="6"
+              required
+              value={otp}
+              onChange={handleOtpChange}
+              className="w-full px-4 py-3 text-center text-xl tracking-[0.5em] bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+              placeholder="••••••"
+            />
+          </div>
+        </div>
+
         <button
           type="submit"
-          disabled={isLoading}
-          className="w-full flex justify-center items-center px-4 py-2 text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition disabled:bg-green-400"
+          disabled={isLoading || otp.length !== 6}
+          className="w-full flex justify-center items-center space-x-2 px-4 py-3 bg-purple-600 rounded-lg text-white font-medium hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 transition disabled:bg-purple-800 disabled:cursor-not-allowed"
         >
-          {isLoading ? <Spinner /> : 'Verify & Create Account'}
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <>
+              <ShieldCheck size={18} />
+              <span>Verify & Continue</span>
+            </>
+          )}
         </button>
       </form>
+
+      <div className="text-center mt-6">
+        <button
+          onClick={handleResendOtp}
+          disabled={isResending}
+          className="flex items-center justify-center space-x-1 text-sm text-blue-400 hover:text-blue-300 transition disabled:text-blue-700 disabled:cursor-not-allowed mx-auto"
+        >
+          <RotateCcw size={14} />
+          <span>{isResending ? 'Sending...' : 'Resend Code'}</span>
+        </button>
+      </div>
+
       <button
         onClick={onGoBack}
-        className="text-center w-full mt-4 text-sm text-blue-600 hover:underline"
+        className="flex items-center justify-center space-x-1 text-sm text-gray-400 hover:text-gray-300 transition mt-6 mx-auto"
       >
-        Go Back
+        <ArrowLeft size={16} />
+        <span>Go Back</span>
       </button>
     </div>
   );
-};
+}; 
 
 export default OtpForm;
