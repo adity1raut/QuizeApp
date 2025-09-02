@@ -20,20 +20,7 @@ import Submissions from './pages/UserPage/Submissions';
 import SubmissionDetails from './pages/UserPage/SubmissionDetails';
 import QuizStatsPage from './pages/AdminPAge/QuizStatsPage';
 import ActiveQuizzesPage from './pages/UserPage/ActiveQuizzesPage';
-
-const HomePage = () => (
-  <div className="p-8 text-center">
-    <h1 className="text-4xl font-bold">Welcome to MyApp</h1>
-    <p className="mt-4">Navigate using the links in the header.</p>
-  </div>
-);
-
-const NotFoundPage = () => (
-  <div className="p-8 text-center">
-    <h1 className="text-4xl font-bold">404 - Page Not Found</h1>
-    <p className="mt-4">The page you are looking for does not exist.</p>
-  </div>
-);
+import { HomePage , NotFoundPage} from './pages/ExtraPage/Homepage';
 
 export default function App() {
   return (
