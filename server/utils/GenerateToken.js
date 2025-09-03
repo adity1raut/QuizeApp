@@ -14,8 +14,8 @@ const generateToken = (res, user) => {
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
 
     res.cookie('token', token, {
-        httpOnly: true, // Prevents client-side JS from accessing the cookie
-        secure: process.env.NODE_ENV === 'development', // Use secure cookies in production
+        httpOnly: true, 
+        secure: process.env.NODE_ENV === 'development', 
         sameSite: 'strict', 
         maxAge: 3600000 
     });

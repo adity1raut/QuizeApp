@@ -10,12 +10,21 @@ import {
   Loader2,
   Star,
   BarChart3,
+  Clock,
+  Trophy,
+  Search,
+  Filter,
+  Zap,
+  Brain,
+  Target
 } from "lucide-react";
 
 const QuizList = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filter, setFilter] = useState("all"); // all, premium, free
 
   useEffect(() => {
     fetchQuizzes();
@@ -33,12 +42,27 @@ const QuizList = () => {
     }
   };
 
+  // Filter quizzes based on search term and filter
+  const filteredQuizzes = quizzes.filter(quiz => {
+    const matchesSearch = quiz.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                         quiz.description.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesFilter = filter === "all" || 
+                         (filter === "premium" && quiz.isPremium) || 
+                         (filter === "free" && !quiz.isPremium);
+    
+    return matchesSearch && matchesFilter;
+  });
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 text-blue-500 animate-spin mx-auto" />
-          <p className="mt-4 text-gray-300">Loading quizzes...</p>
+          <div className="relative">
+            <Loader2 className="h-14 w-14 text-blue-500 animate-spin mx-auto" />
+            <div className="absolute inset-0 bg-blue-500/20 rounded-full animate-ping"></div>
+          </div>
+          <p className="mt-4 text-gray-300 text-lg">Loading quizzes...</p>
         </div>
       </div>
     );
@@ -46,16 +70,19 @@ const QuizList = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-center max-w-md mx-auto p-6">
-          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h3 className="text-xl font-medium text-red-400 mb-2">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center p-4">
+        <div className="text-center max-w-md bg-gray-800/70 backdrop-blur-sm rounded-xl shadow-2xl p-8 border border-gray-700">
+          <div className="relative mb-4">
+            <AlertCircle className="h-14 w-14 text-red-400 mx-auto" />
+            <div className="absolute -inset-2 bg-red-500/10 rounded-full animate-pulse"></div>
+          </div>
+          <h3 className="text-xl font-medium text-red-300 mb-2">
             Error Loading Quizzes
           </h3>
-          <p className="text-gray-400 mb-4">{error}</p>
+          <p className="text-gray-400 mb-6">{error}</p>
           <button
             onClick={fetchQuizzes}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-blue-500/20"
           >
             Try Again
           </button>
@@ -65,60 +92,126 @@ const QuizList = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 py-8 px-4">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold text-white mb-4 flex items-center justify-center">
-            <BookOpen className="h-10 w-10 mr-3 text-blue-400" />
+        {/* Header Section */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center p-3 bg-gradient-to-r from-blue-600/20 to-indigo-600/20 rounded-full mb-5">
+            <Brain className="h-10 w-10 text-blue-400" />
+          </div>
+          <h1 className="text-4xl font-bold text-white mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">
             Quiz Portal
           </h1>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          <p className="text-gray-400 max-w-2xl mx-auto text-lg">
             Test your knowledge with our curated collection of quizzes. Select a
-            quiz below to get started!
+            quiz below to get started on your learning journey!
           </p>
         </div>
 
-        {quizzes.length === 0 ? (
-          <div className="text-center py-16 bg-gray-800 rounded-xl border border-gray-700">
+        {/* Search and Filter Section */}
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-5 border border-gray-700 shadow-lg mb-8">
+          <div className="flex flex-col md:flex-row md:items-center gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search quizzes..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-gray-700/60 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition placeholder-gray-500"
+              />
+            </div>
+            
+            <div className="flex gap-2">
+              <button
+                onClick={() => setFilter("all")}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  filter === "all" 
+                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md" 
+                    : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                }`}
+              >
+                All Quizzes
+              </button>
+              <button
+                onClick={() => setFilter("free")}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  filter === "free" 
+                    ? "bg-gradient-to-r from-green-600 to-teal-600 text-white shadow-md" 
+                    : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                }`}
+              >
+                Free
+              </button>
+              <button
+                onClick={() => setFilter("premium")}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center ${
+                  filter === "premium" 
+                    ? "bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-md" 
+                    : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                }`}
+              >
+                <Star className="h-4 w-4 mr-1 fill-current" />
+                Premium
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {filteredQuizzes.length === 0 ? (
+          <div className="text-center py-16 bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 shadow-lg">
             <div className="flex justify-center mb-4">
-              <div className="p-3 bg-gray-700 rounded-full">
-                <BookOpen className="h-8 w-8 text-gray-400" />
+              <div className="p-4 bg-gray-700/50 rounded-full">
+                <Target className="h-10 w-10 text-gray-400" />
               </div>
             </div>
             <h3 className="text-xl font-medium text-gray-300 mb-2">
-              No Quizzes Available
+              {searchTerm ? "No matching quizzes found" : "No Quizzes Available"}
             </h3>
             <p className="text-gray-500 max-w-md mx-auto">
-              There are no active quizzes at the moment. Please check back
-              later.
+              {searchTerm 
+                ? "Try adjusting your search terms or filters."
+                : "There are no active quizzes at the moment. Please check back later."
+              }
             </p>
+            {searchTerm && (
+              <button
+                onClick={() => {
+                  setSearchTerm("");
+                  setFilter("all");
+                }}
+                className="mt-4 px-4 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition-colors"
+              >
+                Clear Search
+              </button>
+            )}
           </div>
         ) : (
           <>
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-white flex items-center">
                 <BarChart3 className="h-6 w-6 mr-2 text-blue-400" />
-                Active Quizzes
+                Available Quizzes
+                <span className="ml-3 text-sm text-gray-400 bg-gray-700 px-3 py-1 rounded-full">
+                  {filteredQuizzes.length} {filteredQuizzes.length === 1 ? "Quiz" : "Quizzes"}
+                </span>
               </h2>
-              <span className="text-sm text-gray-400 bg-gray-800 px-3 py-1 rounded-full">
-                {quizzes.length} {quizzes.length === 1 ? "Quiz" : "Quizzes"}
-              </span>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {quizzes.map((quiz) => (
+              {filteredQuizzes.map((quiz) => (
                 <div
                   key={quiz._id}
-                  className="bg-gray-800 overflow-hidden shadow-lg rounded-xl border border-gray-700 hover:border-blue-500 transition-all duration-300 hover:translate-y-1"
+                  className="bg-gray-800/70 backdrop-blur-sm overflow-hidden shadow-xl rounded-2xl border border-gray-700 hover:border-blue-500/50 transition-all duration-300 hover:scale-[1.02] group"
                 >
                   <div className="p-6">
                     <div className="flex justify-between items-start mb-4">
-                      <h3 className="text-xl font-semibold text-white line-clamp-2">
+                      <h3 className="text-xl font-semibold text-white line-clamp-2 group-hover:text-blue-300 transition-colors">
                         {quiz.title}
                       </h3>
                       {quiz.isPremium && (
-                        <span className="flex items-center text-amber-400 text-sm bg-amber-900 bg-opacity-30 px-2 py-1 rounded-full">
-                          <Star className="h-3 w-3 mr-1 fill-current" />
+                        <span className="flex items-center text-amber-400 text-sm bg-amber-900/30 px-2.5 py-1 rounded-full border border-amber-700/50">
+                          <Star className="h-3.5 w-3.5 mr-1 fill-current" />
                           Premium
                         </span>
                       )}
@@ -127,32 +220,43 @@ const QuizList = () => {
                       {quiz.description}
                     </p>
 
-                    <div className="flex items-center text-xs text-gray-500 mb-5">
-                      <div className="flex items-center mr-4">
-                        <User className="h-3 w-3 mr-1" />
-                        <span>By: {quiz.createdBy.username}</span>
-                      </div>
-                      <div className="flex items-center">
-                        <Calendar className="h-3 w-3 mr-1" />
-                        <span>
-                          {new Date(quiz.createdAt).toLocaleDateString()}
-                        </span>
+                    <div className="flex items-center justify-between mb-5">
+                      <div className="flex items-center text-xs text-gray-500">
+                        <div className="flex items-center mr-4">
+                          <User className="h-3.5 w-3.5 mr-1.5" />
+                          <span>{quiz.createdBy.username}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <Calendar className="h-3.5 w-3.5 mr-1.5" />
+                          <span>
+                            {new Date(quiz.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between">
-                      <div className="text-sm text-gray-400">
-                        {quiz.questions.length}{" "}
-                        {quiz.questions.length === 1 ? "Question" : "Questions"}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center text-sm text-gray-400">
+                        <BookOpen className="h-4 w-4 mr-1.5" />
+                        <span>
+                          {quiz.questions.length} {quiz.questions.length === 1 ? "Question" : "Questions"}
+                        </span>
                       </div>
-                      <Link
-                        to={`/quiz/${quiz._id}`}
-                        className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors group"
-                      >
-                        Start Quiz
-                        <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                      </Link>
+                      {quiz.timeLimit && (
+                        <div className="flex items-center text-sm text-gray-400">
+                          <Clock className="h-4 w-4 mr-1.5" />
+                          <span>{quiz.timeLimit} min</span>
+                        </div>
+                      )}
                     </div>
+
+                    <Link
+                      to={`/quiz/${quiz._id}`}
+                      className="w-full inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition-all shadow-md hover:shadow-lg hover:shadow-blue-500/20 group/btn"
+                    >
+                      Start Quiz
+                      <ArrowRight className="h-4 w-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                    </Link>
                   </div>
                 </div>
               ))}
