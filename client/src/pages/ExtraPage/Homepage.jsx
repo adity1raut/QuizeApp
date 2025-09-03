@@ -1,13 +1,13 @@
-import { Link } from 'react-router-dom';
-import { 
-  Home as HomeIcon, 
-  AlertTriangle, 
-  ArrowRight, 
+import { Link } from "react-router-dom";
+import {
+  Home as HomeIcon,
+  AlertTriangle,
+  ArrowRight,
   Compass,
   BookOpen,
   BarChart3,
-  User
-} from 'lucide-react';
+  User,
+} from "lucide-react";
 
 const HomePage = () => (
   <div className="min-h-screen bg-gray-900 py-12 px-4">
@@ -21,7 +21,8 @@ const HomePage = () => (
           Welcome to <span className="text-blue-400">QuizMaster</span>
         </h1>
         <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-          Test your knowledge, challenge your friends, and track your progress with our interactive quiz platform.
+          Test your knowledge, challenge your friends, and track your progress
+          with our interactive quiz platform.
         </p>
       </div>
 
@@ -31,9 +32,12 @@ const HomePage = () => (
           <div className="inline-flex items-center justify-center p-3 bg-blue-900 bg-opacity-20 rounded-full mb-4">
             <Compass className="h-6 w-6 text-blue-400" />
           </div>
-          <h3 className="text-xl font-semibold text-white mb-2">Explore Quizzes</h3>
+          <h3 className="text-xl font-semibold text-white mb-2">
+            Explore Quizzes
+          </h3>
           <p className="text-gray-400">
-            Discover a wide range of quizzes on various topics from our community.
+            Discover a wide range of quizzes on various topics from our
+            community.
           </p>
         </div>
 
@@ -41,9 +45,12 @@ const HomePage = () => (
           <div className="inline-flex items-center justify-center p-3 bg-purple-900 bg-opacity-20 rounded-full mb-4">
             <BarChart3 className="h-6 w-6 text-purple-400" />
           </div>
-          <h3 className="text-xl font-semibold text-white mb-2">Track Progress</h3>
+          <h3 className="text-xl font-semibold text-white mb-2">
+            Track Progress
+          </h3>
           <p className="text-gray-400">
-            Monitor your performance with detailed analytics and progress tracking.
+            Monitor your performance with detailed analytics and progress
+            tracking.
           </p>
         </div>
 
@@ -51,7 +58,9 @@ const HomePage = () => (
           <div className="inline-flex items-center justify-center p-3 bg-green-900 bg-opacity-20 rounded-full mb-4">
             <User className="h-6 w-6 text-green-400" />
           </div>
-          <h3 className="text-xl font-semibold text-white mb-2">Compete with Friends</h3>
+          <h3 className="text-xl font-semibold text-white mb-2">
+            Compete with Friends
+          </h3>
           <p className="text-gray-400">
             Challenge your friends and see who can achieve the highest scores.
           </p>
@@ -83,23 +92,27 @@ const NotFoundPage = () => (
       <div className="inline-flex items-center justify-center p-4 bg-red-900 bg-opacity-20 rounded-full mb-6">
         <AlertTriangle className="h-12 w-12 text-red-400" />
       </div>
-      <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">404 - Page Not Found</h1>
+      <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+        404 - Page Not Found
+      </h1>
       <p className="text-xl text-gray-300 mb-8">
         The page you are looking for doesn't exist or has been moved.
       </p>
-      
+
       <div className="bg-gray-800 p-6 rounded-xl border border-gray-700 mb-8">
-        <h2 className="text-lg font-semibold text-white mb-3">Here are some helpful links:</h2>
+        <h2 className="text-lg font-semibold text-white mb-3">
+          Here are some helpful links:
+        </h2>
         <div className="space-y-3">
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="flex items-center justify-center p-3 bg-gray-700 text-gray-200 rounded-lg hover:bg-gray-600 transition-colors"
           >
             <HomeIcon className="h-5 w-5 mr-2" />
             Home Page
           </Link>
-          <Link 
-            to="/quizzes" 
+          <Link
+            to="/quizzes"
             className="flex items-center justify-center p-3 bg-gray-700 text-gray-200 rounded-lg hover:bg-gray-600 transition-colors"
           >
             <BookOpen className="h-5 w-5 mr-2" />

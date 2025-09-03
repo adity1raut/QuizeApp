@@ -1,9 +1,8 @@
-import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from './AuthContext';
+import React from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 
-
-export const ProtectedRoute = ({ children, redirectTo = '/login' }) => {
+export const ProtectedRoute = ({ children, redirectTo = "/login" }) => {
   const { isAuthenticated, loading } = useAuth();
   const location = useLocation();
 
@@ -24,10 +23,10 @@ export const ProtectedRoute = ({ children, redirectTo = '/login' }) => {
 };
 
 // Role-Based Protected Route Component
-export const RoleProtectedRoute = ({ 
-  children, 
-  allowedRoles = [], 
-  redirectTo = '/unauthorized' 
+export const RoleProtectedRoute = ({
+  children,
+  allowedRoles = [],
+  redirectTo = "/unauthorized",
 }) => {
   const { isAuthenticated, loading, user, hasAnyRole } = useAuth();
   const location = useLocation();
@@ -54,18 +53,14 @@ export const RoleProtectedRoute = ({
 // Admin Only Route Component
 export const AdminRoute = ({ children }) => {
   return (
-    <RoleProtectedRoute allowedRoles={['Admin']}>
-      {children}
-    </RoleProtectedRoute>
+    <RoleProtectedRoute allowedRoles={["Admin"]}>{children}</RoleProtectedRoute>
   );
 };
 
 // User Only Route Component
 export const UserRoute = ({ children }) => {
   return (
-    <RoleProtectedRoute allowedRoles={['User']}>
-      {children}
-    </RoleProtectedRoute>
+    <RoleProtectedRoute allowedRoles={["User"]}>{children}</RoleProtectedRoute>
   );
 };
 
@@ -128,7 +123,7 @@ export const UnauthorizedPage = () => {
           </p>
           {isAuthenticated && (
             <p className="mt-2 text-xs text-gray-400">
-              Current role: {user?.role || 'Unknown'}
+              Current role: {user?.role || "Unknown"}
             </p>
           )}
           <div className="mt-6">

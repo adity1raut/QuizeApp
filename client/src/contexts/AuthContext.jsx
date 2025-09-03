@@ -1,12 +1,12 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import axios from "axios";
 
 const AuthContext = createContext();
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await axios.get('/api/auth/profile', {
+      const response = await axios.get("/api/auth/profile", {
         withCredentials: true,
       });
 
@@ -40,12 +40,16 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('/api/auth/login', {
-        email,
-        password,
-      }, {
-        withCredentials: true,
-      });
+      const response = await axios.post(
+        "/api/auth/login",
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
+        },
+      );
 
       if (response.data.user) {
         setUser(response.data.user);
@@ -53,12 +57,12 @@ export const AuthProvider = ({ children }) => {
         return { success: true, message: response.data.message };
       }
     } catch (error) {
-      let errorMessage = 'Login failed. Please try again.';
+      let errorMessage = "Login failed. Please try again.";
 
       if (error.response?.data?.message) {
         errorMessage = error.response.data.message;
       } else if (error.request) {
-        errorMessage = 'Network error. Please check your connection.';
+        errorMessage = "Network error. Please check your connection.";
       }
       return { success: false, message: errorMessage };
     }
@@ -66,11 +70,15 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post('/api/auth/logout', {}, {
-        withCredentials: true,
-      });
+      await axios.post(
+        "/api/auth/logout",
+        {},
+        {
+          withCredentials: true,
+        },
+      );
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     } finally {
       setUser(null);
       setIsAuthenticated(false);
@@ -78,11 +86,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const isAdmin = () => {
-    return user?.role === 'Admin';
+    return user?.role === "Admin";
   };
 
   const isUser = () => {
-    return user?.role === 'User';
+    return user?.role === "User";
   };
 
   const hasRole = (role) => {
@@ -106,9 +114,5 @@ export const AuthProvider = ({ children }) => {
     hasAnyRole,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

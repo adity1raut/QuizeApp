@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import Spinner from './Spinner';
-import { Mail, Lock, Eye, EyeOff, LogIn } from 'lucide-react';
+import React, { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import Spinner from "./Spinner";
+import { Mail, Lock, Eye, EyeOff, LogIn } from "lucide-react";
 
 const LoginForm = ({ setGlobalMessage }) => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const togglePasswordVisibility = () => {
@@ -27,25 +27,25 @@ const LoginForm = ({ setGlobalMessage }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setGlobalMessage({ text: '', isError: false });
+    setGlobalMessage({ text: "", isError: false });
     setIsLoading(true);
 
     try {
       const result = await login(formData.email, formData.password);
-      
+
       if (result.success) {
         setGlobalMessage({ text: result.message, isError: false });
-        
+
         // Redirect to intended page or dashboard
-        const from = location.state?.from?.pathname || '/dashboard';
+        const from = location.state?.from?.pathname || "/dashboard";
         navigate(from, { replace: true });
       } else {
         setGlobalMessage({ text: result.message, isError: true });
       }
     } catch (error) {
-      setGlobalMessage({ 
-        text: 'An unexpected error occurred. Please try again.', 
-        isError: true 
+      setGlobalMessage({
+        text: "An unexpected error occurred. Please try again.",
+        isError: true,
       });
     } finally {
       setIsLoading(false);
@@ -61,12 +61,17 @@ const LoginForm = ({ setGlobalMessage }) => {
           </div>
         </div>
         <h2 className="text-2xl font-bold">Sign In to Your Account</h2>
-        <p className="text-gray-400 mt-2">Welcome back! Please enter your details</p>
+        <p className="text-gray-400 mt-2">
+          Welcome back! Please enter your details
+        </p>
       </div>
-      
+
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <label htmlFor="loginEmail" className="text-sm font-medium text-gray-300">
+          <label
+            htmlFor="loginEmail"
+            className="text-sm font-medium text-gray-300"
+          >
             Email address
           </label>
           <div className="relative">
@@ -86,9 +91,12 @@ const LoginForm = ({ setGlobalMessage }) => {
             />
           </div>
         </div>
-        
+
         <div className="space-y-2">
-          <label htmlFor="loginPassword" className="text-sm font-medium text-gray-300">
+          <label
+            htmlFor="loginPassword"
+            className="text-sm font-medium text-gray-300"
+          >
             Password
           </label>
           <div className="relative">
@@ -115,7 +123,7 @@ const LoginForm = ({ setGlobalMessage }) => {
             </button>
           </div>
         </div>
-        
+
         <button
           type="submit"
           disabled={isLoading}
@@ -134,14 +142,14 @@ const LoginForm = ({ setGlobalMessage }) => {
 
       <div className="text-center mt-8 pt-6 border-t border-gray-800">
         <p className="text-sm text-gray-400">
-          Don't have an account?{' '}
-          <Link 
-            to="/signup" 
+          Don't have an account?{" "}
+          <Link
+            to="/signup"
             className="text-blue-400 hover:text-blue-300 font-medium transition"
           >
             Create one here
           </Link>
-        </p> 
+        </p>
       </div>
     </div>
   );

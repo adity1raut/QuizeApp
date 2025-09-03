@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 import {
   AlertCircle,
   BookOpen,
@@ -11,13 +11,13 @@ import {
   Loader2,
   Trophy,
   Clock,
-  FileText
-} from 'lucide-react';
+  FileText,
+} from "lucide-react";
 
 const Submissions = () => {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchSubmissions();
@@ -25,28 +25,28 @@ const Submissions = () => {
 
   const fetchSubmissions = async () => {
     try {
-      const response = await axios.get('/api/my-submissions');
+      const response = await axios.get("/api/my-submissions");
       setSubmissions(response.data.submissions);
     } catch (error) {
-      setError('Failed to fetch submissions');
-      console.error('Error fetching submissions:', error);
+      setError("Failed to fetch submissions");
+      console.error("Error fetching submissions:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const getScoreColor = (score) => {
-    if (score >= 90) return 'text-green-400';
-    if (score >= 70) return 'text-blue-400';
-    if (score >= 50) return 'text-yellow-400';
-    return 'text-red-400';
+    if (score >= 90) return "text-green-400";
+    if (score >= 70) return "text-blue-400";
+    if (score >= 50) return "text-yellow-400";
+    return "text-red-400";
   };
 
   const getScoreBgColor = (score) => {
-    if (score >= 90) return 'bg-green-900 bg-opacity-30';
-    if (score >= 70) return 'bg-blue-900 bg-opacity-30';
-    if (score >= 50) return 'bg-yellow-900 bg-opacity-30';
-    return 'bg-red-900 bg-opacity-30';
+    if (score >= 90) return "bg-green-900 bg-opacity-30";
+    if (score >= 70) return "bg-blue-900 bg-opacity-30";
+    if (score >= 50) return "bg-yellow-900 bg-opacity-30";
+    return "bg-red-900 bg-opacity-30";
   };
 
   if (loading) {
@@ -76,14 +76,14 @@ const Submissions = () => {
             Back to Quizzes
           </Link>
         </div>
-        
+
         {error && (
           <div className="bg-red-900 bg-opacity-20 p-4 rounded-lg border border-red-800 mb-6 flex items-center">
             <AlertCircle className="h-5 w-5 text-red-400 mr-3" />
             <div className="text-red-300">{error}</div>
           </div>
         )}
-        
+
         {submissions.length === 0 ? (
           <div className="text-center py-16 bg-gray-800 rounded-xl border border-gray-700">
             <div className="flex justify-center mb-4">
@@ -91,9 +91,12 @@ const Submissions = () => {
                 <BookOpen className="h-8 w-8 text-gray-400" />
               </div>
             </div>
-            <h3 className="text-xl font-medium text-gray-300 mb-2">No Submissions Yet</h3>
+            <h3 className="text-xl font-medium text-gray-300 mb-2">
+              No Submissions Yet
+            </h3>
             <p className="text-gray-500 max-w-md mx-auto mb-6">
-              You haven't submitted any quizzes yet. Take your first quiz to see your results here.
+              You haven't submitted any quizzes yet. Take your first quiz to see
+              your results here.
             </p>
             <Link
               to="/"
@@ -109,23 +112,28 @@ const Submissions = () => {
               <div className="flex items-center">
                 <BarChart3 className="h-5 w-5 text-blue-400 mr-2" />
                 <h2 className="text-lg font-medium text-white">
-                  {submissions.length} {submissions.length === 1 ? 'Submission' : 'Submissions'}
+                  {submissions.length}{" "}
+                  {submissions.length === 1 ? "Submission" : "Submissions"}
                 </h2>
               </div>
             </div>
             <ul className="divide-y divide-gray-700">
               {submissions.map((submission) => (
                 <li key={submission._id}>
-                  <Link 
-                    to={`/submission/${submission._id}`} 
+                  <Link
+                    to={`/submission/${submission._id}`}
                     className="block hover:bg-gray-750 transition-colors"
                   >
                     <div className="px-4 py-4 sm:px-6">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center">
                           <div className="flex-shrink-0">
-                            <div className={`h-10 w-10 rounded-full flex items-center justify-center ${getScoreBgColor(submission.score)}`}>
-                              <span className={`text-sm font-bold ${getScoreColor(submission.score)}`}>
+                            <div
+                              className={`h-10 w-10 rounded-full flex items-center justify-center ${getScoreBgColor(submission.score)}`}
+                            >
+                              <span
+                                className={`text-sm font-bold ${getScoreColor(submission.score)}`}
+                              >
                                 {submission.score}%
                               </span>
                             </div>
@@ -143,11 +151,19 @@ const Submissions = () => {
                           <div className="text-right mr-3 hidden sm:block">
                             <div className="flex items-center text-sm text-gray-400">
                               <Calendar className="h-4 w-4 mr-1" />
-                              <span>{new Date(submission.createdAt).toLocaleDateString()}</span>
+                              <span>
+                                {new Date(
+                                  submission.createdAt,
+                                ).toLocaleDateString()}
+                              </span>
                             </div>
                             <div className="flex items-center text-xs text-gray-500 mt-1">
                               <Clock className="h-3 w-3 mr-1" />
-                              <span>{new Date(submission.createdAt).toLocaleTimeString()}</span>
+                              <span>
+                                {new Date(
+                                  submission.createdAt,
+                                ).toLocaleTimeString()}
+                              </span>
                             </div>
                           </div>
                           <ChevronRight className="h-5 w-5 text-gray-500" />

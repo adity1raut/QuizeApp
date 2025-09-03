@@ -1,20 +1,25 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import Spinner from './Spinner';
-import { ArrowLeft, Mail, ShieldCheck, RotateCcw } from 'lucide-react';
+import React, { useState } from "react";
+import axios from "axios";
+import Spinner from "./Spinner";
+import { ArrowLeft, Mail, ShieldCheck, RotateCcw } from "lucide-react";
 
-const OtpForm = ({ email, onVerificationSuccess, setGlobalMessage, onGoBack }) => {
-  const [otp, setOtp] = useState('');
+const OtpForm = ({
+  email,
+  onVerificationSuccess,
+  setGlobalMessage,
+  onGoBack,
+}) => {
+  const [otp, setOtp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isResending, setIsResending] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setGlobalMessage({ text: '', isError: false });
+    setGlobalMessage({ text: "", isError: false });
     setIsLoading(true);
 
     try {
-      const response = await axios.post('/api/auth/verify-otp', {
+      const response = await axios.post("/api/auth/verify-otp", {
         email,
         otp,
       });
@@ -25,21 +30,21 @@ const OtpForm = ({ email, onVerificationSuccess, setGlobalMessage, onGoBack }) =
       // Handle different types of errors
       if (error.response) {
         // Server responded with error status
-        setGlobalMessage({ 
-          text: error.response.data.message || 'OTP verification failed.', 
-          isError: true 
+        setGlobalMessage({
+          text: error.response.data.message || "OTP verification failed.",
+          isError: true,
         });
       } else if (error.request) {
         // Network error
-        setGlobalMessage({ 
-          text: 'Network error. Please check your connection.', 
-          isError: true 
+        setGlobalMessage({
+          text: "Network error. Please check your connection.",
+          isError: true,
         });
       } else {
         // Other errors
-        setGlobalMessage({ 
-          text: 'An error occurred. Please try again.', 
-          isError: true 
+        setGlobalMessage({
+          text: "An error occurred. Please try again.",
+          isError: true,
         });
       }
     } finally {
@@ -49,18 +54,18 @@ const OtpForm = ({ email, onVerificationSuccess, setGlobalMessage, onGoBack }) =
 
   const handleResendOtp = async () => {
     setIsResending(true);
-    setGlobalMessage({ text: '', isError: false });
-    
+    setGlobalMessage({ text: "", isError: false });
+
     try {
-      const response = await axios.post('/api/auth/resend-otp', { email });
-      setGlobalMessage({ 
-        text: response.data.message || 'New OTP sent to your email.', 
-        isError: false 
+      const response = await axios.post("/api/auth/resend-otp", { email });
+      setGlobalMessage({
+        text: response.data.message || "New OTP sent to your email.",
+        isError: false,
       });
     } catch (error) {
-      setGlobalMessage({ 
-        text: 'Failed to resend OTP. Please try again.', 
-        isError: true 
+      setGlobalMessage({
+        text: "Failed to resend OTP. Please try again.",
+        isError: true,
       });
     } finally {
       setIsResending(false);
@@ -68,7 +73,7 @@ const OtpForm = ({ email, onVerificationSuccess, setGlobalMessage, onGoBack }) =
   };
 
   const handleOtpChange = (e) => {
-    const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+    const value = e.target.value.replace(/\D/g, "").slice(0, 6);
     setOtp(value);
   };
 
@@ -93,7 +98,10 @@ const OtpForm = ({ email, onVerificationSuccess, setGlobalMessage, onGoBack }) =
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <label htmlFor="otpInput" className="text-sm font-medium text-gray-300">
+          <label
+            htmlFor="otpInput"
+            className="text-sm font-medium text-gray-300"
+          >
             Verification Code
           </label>
           <div className="relative">
@@ -136,7 +144,7 @@ const OtpForm = ({ email, onVerificationSuccess, setGlobalMessage, onGoBack }) =
           className="flex items-center justify-center space-x-1 text-sm text-blue-400 hover:text-blue-300 transition disabled:text-blue-700 disabled:cursor-not-allowed mx-auto"
         >
           <RotateCcw size={14} />
-          <span>{isResending ? 'Sending...' : 'Resend Code'}</span>
+          <span>{isResending ? "Sending..." : "Resend Code"}</span>
         </button>
       </div>
 
@@ -149,6 +157,6 @@ const OtpForm = ({ email, onVerificationSuccess, setGlobalMessage, onGoBack }) =
       </button>
     </div>
   );
-}; 
+};
 
 export default OtpForm;

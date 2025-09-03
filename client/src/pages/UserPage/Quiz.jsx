@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { 
-  ArrowLeft, 
-  ArrowRight, 
-  CheckCircle, 
-  Circle, 
-  Clock, 
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle,
+  Circle,
+  Clock,
   AlertCircle,
   Loader2,
   Send,
-  BarChart3
-} from 'lucide-react';
+  BarChart3,
+} from "lucide-react";
 
 const Quiz = () => {
   const { id } = useParams();
@@ -21,7 +21,7 @@ const Quiz = () => {
   const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchQuiz();
@@ -32,8 +32,8 @@ const Quiz = () => {
       const response = await axios.get(`/api/quiz/${id}/start`);
       setQuiz(response.data.quiz);
     } catch (error) {
-      setError('Failed to load quiz');
-      console.error('Error fetching quiz:', error);
+      setError("Failed to load quiz");
+      console.error("Error fetching quiz:", error);
     } finally {
       setLoading(false);
     }
@@ -42,7 +42,7 @@ const Quiz = () => {
   const handleAnswerSelect = (questionId, selectedAnswer) => {
     setAnswers({
       ...answers,
-      [questionId]: selectedAnswer
+      [questionId]: selectedAnswer,
     });
   };
 
@@ -62,23 +62,27 @@ const Quiz = () => {
     setSubmitting(true);
     try {
       // Format answers for submission
-      const formattedAnswers = Object.entries(answers).map(([questionId, selectedAnswer]) => ({
-        questionId,
-        selectedAnswer
-      }));
+      const formattedAnswers = Object.entries(answers).map(
+        ([questionId, selectedAnswer]) => ({
+          questionId,
+          selectedAnswer,
+        }),
+      );
 
       const response = await axios.post(`/api/quiz/${id}/submit`, {
-        answers: formattedAnswers
+        answers: formattedAnswers,
       });
 
       navigate(`/results/${response.data.results.submissionId}`);
     } catch (error) {
       if (error.response?.data?.previousScore) {
-        alert(`You've already submitted this quiz. Your previous score was ${error.response.data.previousScore}%`);
-        navigate('/');
+        alert(
+          `You've already submitted this quiz. Your previous score was ${error.response.data.previousScore}%`,
+        );
+        navigate("/");
       } else {
-        setError('Failed to submit quiz');
-        console.error('Error submitting quiz:', error);
+        setError("Failed to submit quiz");
+        console.error("Error submitting quiz:", error);
       }
     } finally {
       setSubmitting(false);
@@ -101,9 +105,11 @@ const Quiz = () => {
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <AlertCircle className="h-12 w-12 text-red-500 mx-auto" />
-          <p className="mt-4 text-red-400 text-xl">{error || 'Quiz not found'}</p>
-          <button 
-            onClick={() => navigate('/')}
+          <p className="mt-4 text-red-400 text-xl">
+            {error || "Quiz not found"}
+          </p>
+          <button
+            onClick={() => navigate("/")}
             className="mt-6 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
           >
             Return Home
@@ -120,17 +126,17 @@ const Quiz = () => {
     <div className="min-h-screen bg-gray-900 text-gray-100 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <button 
+          <button
             onClick={() => navigate(-1)}
             className="flex items-center text-gray-400 hover:text-white transition-colors mb-4"
           >
             <ArrowLeft className="h-5 w-5 mr-1" />
             Back
           </button>
-          
+
           <h1 className="text-3xl font-bold text-white mb-2">{quiz.title}</h1>
           <p className="text-gray-400">{quiz.description}</p>
-          
+
           <div className="flex items-center mt-4 text-gray-400 text-sm">
             <Clock className="h-4 w-4 mr-1" />
             <span>{quiz.questions.length} questions</span>
@@ -148,8 +154,8 @@ const Quiz = () => {
             </span>
           </div>
           <div className="w-full bg-gray-700 rounded-full h-2.5">
-            <div 
-              className="bg-blue-600 h-2.5 rounded-full transition-all duration-300" 
+            <div
+              className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
@@ -163,14 +169,16 @@ const Quiz = () => {
             </span>
             {question.questionText}
           </h3>
-          
+
           <div className="space-y-3">
             {question.options.map((option, index) => (
-              <div 
-                key={index} 
-                className={`flex items-center p-4 rounded-lg cursor-pointer transition-all ${answers[question._id] === option 
-                  ? 'bg-blue-900 border-blue-500' 
-                  : 'bg-gray-700 hover:bg-gray-600 border-gray-600'}`}
+              <div
+                key={index}
+                className={`flex items-center p-4 rounded-lg cursor-pointer transition-all ${
+                  answers[question._id] === option
+                    ? "bg-blue-900 border-blue-500"
+                    : "bg-gray-700 hover:bg-gray-600 border-gray-600"
+                }`}
                 onClick={() => handleAnswerSelect(question._id, option)}
               >
                 {answers[question._id] === option ? (
@@ -202,14 +210,16 @@ const Quiz = () => {
           <button
             onClick={handlePrevious}
             disabled={currentQuestion === 0}
-            className={`flex items-center px-4 py-3 rounded-md font-medium transition-colors ${currentQuestion === 0 
-              ? 'bg-gray-800 text-gray-500 cursor-not-allowed' 
-              : 'bg-gray-700 text-gray-200 hover:bg-gray-600'}`}
+            className={`flex items-center px-4 py-3 rounded-md font-medium transition-colors ${
+              currentQuestion === 0
+                ? "bg-gray-800 text-gray-500 cursor-not-allowed"
+                : "bg-gray-700 text-gray-200 hover:bg-gray-600"
+            }`}
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Previous
           </button>
-          
+
           {currentQuestion < quiz.questions.length - 1 ? (
             <button
               onClick={handleNext}
@@ -221,10 +231,16 @@ const Quiz = () => {
           ) : (
             <button
               onClick={handleSubmit}
-              disabled={submitting || Object.keys(answers).length < quiz.questions.length}
-              className={`flex items-center px-4 py-3 rounded-md font-medium transition-colors ${submitting || Object.keys(answers).length < quiz.questions.length
-                ? 'bg-gray-800 text-gray-500 cursor-not-allowed' 
-                : 'bg-green-600 text-white hover:bg-green-700'}`}
+              disabled={
+                submitting ||
+                Object.keys(answers).length < quiz.questions.length
+              }
+              className={`flex items-center px-4 py-3 rounded-md font-medium transition-colors ${
+                submitting ||
+                Object.keys(answers).length < quiz.questions.length
+                  ? "bg-gray-800 text-gray-500 cursor-not-allowed"
+                  : "bg-green-600 text-white hover:bg-green-700"
+              }`}
             >
               {submitting ? (
                 <>
@@ -246,19 +262,30 @@ const Quiz = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center text-sm text-gray-300">
               <BarChart3 className="h-4 w-4 mr-2" />
-              <span>Answered: {Object.keys(answers).length} of {quiz.questions.length} questions</span>
+              <span>
+                Answered: {Object.keys(answers).length} of{" "}
+                {quiz.questions.length} questions
+              </span>
             </div>
-            
+
             <div className="flex space-x-1">
               {quiz.questions.map((q, index) => (
-                <div 
+                <div
                   key={q._id}
-                  className={`h-2 w-2 rounded-full ${answers[q._id] 
-                    ? 'bg-green-400' 
-                    : index === currentQuestion 
-                      ? 'bg-blue-400' 
-                      : 'bg-gray-600'}`}
-                  title={index === currentQuestion ? 'Current question' : answers[q._id] ? 'Answered' : 'Not answered'}
+                  className={`h-2 w-2 rounded-full ${
+                    answers[q._id]
+                      ? "bg-green-400"
+                      : index === currentQuestion
+                        ? "bg-blue-400"
+                        : "bg-gray-600"
+                  }`}
+                  title={
+                    index === currentQuestion
+                      ? "Current question"
+                      : answers[q._id]
+                        ? "Answered"
+                        : "Not answered"
+                  }
                 />
               ))}
             </div>

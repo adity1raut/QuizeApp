@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  BarChart3, 
-  Clock, 
-  Calendar, 
-  Edit3, 
-  Users, 
-  TrendingUp, 
+import React, { useState, useEffect } from "react";
+import {
+  BarChart3,
+  Clock,
+  Calendar,
+  Edit3,
+  Users,
+  TrendingUp,
   AlertCircle,
   Loader2,
   RefreshCw,
   Eye,
   EyeOff,
-  Shield
-} from 'lucide-react';
-import { useAuth } from "../../contexts/AuthContext"
+  Shield,
+} from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
 
 const QuizStatsPage = () => {
   const [quizStats, setQuizStats] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [quizId, setQuizId] = useState('');
+  const [error, setError] = useState("");
+  const [quizId, setQuizId] = useState("");
   const { isAuthenticated, isAdmin, loading: authLoading } = useAuth();
 
   // In a real app, this would come from route params or context
@@ -31,19 +31,19 @@ const QuizStatsPage = () => {
 
   const checkAccess = () => {
     if (!isAuthenticated) {
-      setError('Authentication required. Please log in.');
+      setError("Authentication required. Please log in.");
       setLoading(false);
       return;
     }
 
     if (!isAdmin()) {
-      setError('Access denied. Admin privileges required.');
+      setError("Access denied. Admin privileges required.");
       setLoading(false);
       return;
     }
 
     // Extract quizId from URL if needed
-    const pathParts = window.location.pathname.split('/');
+    const pathParts = window.location.pathname.split("/");
     const id = pathParts[pathParts.length - 2]; // Assuming URL is /admin/quiz/:quizId/stats
     setQuizId(id);
     fetchQuizStats(id);
@@ -52,24 +52,24 @@ const QuizStatsPage = () => {
   const fetchQuizStats = async (id) => {
     try {
       setLoading(true);
-      setError('');
-      
+      setError("");
+
       const response = await fetch(`/api/admin/quiz/${id}/stats`, {
-        credentials: 'include', // Use cookies for authentication
+        credentials: "include", // Use cookies for authentication
         headers: {
-          'Content-Type': 'application/json',
-        }
+          "Content-Type": "application/json",
+        },
       });
-      
+
       const data = await response.json();
-      
+
       if (data.success) {
         setQuizStats(data.data);
       } else {
-        setError(data.error || 'Failed to fetch quiz statistics');
+        setError(data.error || "Failed to fetch quiz statistics");
       }
     } catch (err) {
-      setError('Network error. Please try again.');
+      setError("Network error. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -80,12 +80,12 @@ const QuizStatsPage = () => {
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
@@ -109,14 +109,13 @@ const QuizStatsPage = () => {
           <Shield className="h-12 w-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold mb-2">Access Denied</h2>
           <p className="text-gray-300 mb-4">
-            {isAuthenticated 
-              ? 'Admin privileges are required to view this page.' 
-              : 'Please log in to access this page.'
-            }
+            {isAuthenticated
+              ? "Admin privileges are required to view this page."
+              : "Please log in to access this page."}
           </p>
           {!isAuthenticated && (
-            <button 
-              onClick={() => window.location.href = '/login'}
+            <button
+              onClick={() => (window.location.href = "/login")}
               className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-md"
             >
               Go to Login
@@ -145,7 +144,7 @@ const QuizStatsPage = () => {
           <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold mb-2">Error Loading Statistics</h2>
           <p className="text-gray-300 mb-4">{error}</p>
-          <button 
+          <button
             onClick={handleRefresh}
             className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-md flex items-center justify-center mx-auto"
           >
@@ -190,13 +189,17 @@ const QuizStatsPage = () => {
 
         {/* Quiz Info Card */}
         <div className="bg-gray-800 rounded-lg p-6 mb-8 shadow-lg">
-          <h2 className="text-2xl font-semibold mb-2">{quizStats.quiz.title}</h2>
+          <h2 className="text-2xl font-semibold mb-2">
+            {quizStats.quiz.title}
+          </h2>
           <p className="text-gray-400 mb-4">{quizStats.quiz.description}</p>
-          
+
           <div className="flex flex-wrap gap-4">
             <div className="flex items-center bg-gray-700 px-4 py-2 rounded-md">
               <Users className="h-5 w-5 mr-2 text-blue-400" />
-              <span className="text-sm font-mono">ID: {quizStats.quiz._id}</span>
+              <span className="text-sm font-mono">
+                ID: {quizStats.quiz._id}
+              </span>
             </div>
           </div>
         </div>
@@ -209,7 +212,9 @@ const QuizStatsPage = () => {
               <h3 className="text-lg font-semibold">Total Questions</h3>
               <Edit3 className="h-6 w-6 text-purple-500" />
             </div>
-            <p className="text-3xl font-bold">{quizStats.stats.totalQuestions}</p>
+            <p className="text-3xl font-bold">
+              {quizStats.stats.totalQuestions}
+            </p>
           </div>
 
           {/* Status Card */}
@@ -223,8 +228,10 @@ const QuizStatsPage = () => {
               )}
             </div>
             <div className="flex items-center">
-              <div className={`h-3 w-3 rounded-full mr-2 ${quizStats.stats.isActive ? 'bg-green-500' : 'bg-red-500'}`}></div>
-              <span>{quizStats.stats.isActive ? 'Active' : 'Inactive'}</span>
+              <div
+                className={`h-3 w-3 rounded-full mr-2 ${quizStats.stats.isActive ? "bg-green-500" : "bg-red-500"}`}
+              ></div>
+              <span>{quizStats.stats.isActive ? "Active" : "Inactive"}</span>
             </div>
           </div>
 
@@ -253,16 +260,19 @@ const QuizStatsPage = () => {
             <TrendingUp className="h-6 w-6 mr-2 text-green-500" />
             <h2 className="text-xl font-semibold">Performance Overview</h2>
           </div>
-          
+
           <div className="text-center py-10 text-gray-400">
             <BarChart3 className="h-12 w-12 mx-auto mb-4 opacity-50" />
             <p>More detailed analytics coming soon</p>
-            <p className="text-sm mt-2">Future versions will include participant metrics, question analysis, and performance trends</p>
+            <p className="text-sm mt-2">
+              Future versions will include participant metrics, question
+              analysis, and performance trends
+            </p>
           </div>
         </div>
       </div>
     </div>
   );
-}; 
+};
 
 export default QuizStatsPage;

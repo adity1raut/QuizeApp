@@ -1,21 +1,29 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import Spinner from './Spinner';
-import { User, Mail, Lock, Eye, EyeOff, ArrowRight, UserPlus } from 'lucide-react';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import Spinner from "./Spinner";
+import {
+  User,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  UserPlus,
+} from "lucide-react";
 
 const SignupForm = ({ onSignupSuccess, setGlobalMessage }) => {
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
+    username: "",
+    email: "",
+    password: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const togglePasswordVisibility = () => {
@@ -24,11 +32,11 @@ const SignupForm = ({ onSignupSuccess, setGlobalMessage }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setGlobalMessage({ text: '', isError: false });
+    setGlobalMessage({ text: "", isError: false });
     setIsLoading(true);
 
     try {
-      const response = await axios.post('/api/auth/signup', formData);
+      const response = await axios.post("/api/auth/signup", formData);
 
       // Axios automatically parses JSON response
       setGlobalMessage({ text: response.data.message, isError: false });
@@ -37,21 +45,21 @@ const SignupForm = ({ onSignupSuccess, setGlobalMessage }) => {
       // Handle different types of errors
       if (error.response) {
         // Server responded with error status
-        setGlobalMessage({ 
-          text: error.response.data.message || 'Signup failed.', 
-          isError: true 
+        setGlobalMessage({
+          text: error.response.data.message || "Signup failed.",
+          isError: true,
         });
       } else if (error.request) {
         // Network error
-        setGlobalMessage({ 
-          text: 'Network error. Please check your connection.', 
-          isError: true 
+        setGlobalMessage({
+          text: "Network error. Please check your connection.",
+          isError: true,
         });
       } else {
         // Other errors
-        setGlobalMessage({ 
-          text: 'An error occurred. Please try again.', 
-          isError: true 
+        setGlobalMessage({
+          text: "An error occurred. Please try again.",
+          isError: true,
         });
       }
     } finally {
@@ -70,10 +78,13 @@ const SignupForm = ({ onSignupSuccess, setGlobalMessage }) => {
         <h2 className="text-2xl font-bold">Create Your Account</h2>
         <p className="text-gray-400 mt-2">Join us and start your journey</p>
       </div>
-      
+
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <label htmlFor="signupUsername" className="text-sm font-medium text-gray-300">
+          <label
+            htmlFor="signupUsername"
+            className="text-sm font-medium text-gray-300"
+          >
             Username
           </label>
           <div className="relative">
@@ -92,9 +103,12 @@ const SignupForm = ({ onSignupSuccess, setGlobalMessage }) => {
             />
           </div>
         </div>
-        
+
         <div className="space-y-2">
-          <label htmlFor="signupEmail" className="text-sm font-medium text-gray-300">
+          <label
+            htmlFor="signupEmail"
+            className="text-sm font-medium text-gray-300"
+          >
             Email address
           </label>
           <div className="relative">
@@ -114,9 +128,12 @@ const SignupForm = ({ onSignupSuccess, setGlobalMessage }) => {
             />
           </div>
         </div>
-        
+
         <div className="space-y-2">
-          <label htmlFor="signupPassword" className="text-sm font-medium text-gray-300">
+          <label
+            htmlFor="signupPassword"
+            className="text-sm font-medium text-gray-300"
+          >
             Password
           </label>
           <div className="relative">
@@ -143,7 +160,7 @@ const SignupForm = ({ onSignupSuccess, setGlobalMessage }) => {
             </button>
           </div>
         </div>
-        
+
         <button
           type="submit"
           disabled={isLoading}
@@ -162,13 +179,16 @@ const SignupForm = ({ onSignupSuccess, setGlobalMessage }) => {
 
       <div className="text-center mt-8 pt-6 border-t border-gray-800">
         <p className="text-sm text-gray-400">
-          Already have an account?{' '}
-          <Link 
-            to="/login" 
+          Already have an account?{" "}
+          <Link
+            to="/login"
             className="inline-flex items-center text-blue-400 hover:text-blue-300 font-medium transition group"
           >
             Sign in here
-            <ArrowRight size={14} className="ml-1 group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight
+              size={14}
+              className="ml-1 group-hover:translate-x-0.5 transition-transform"
+            />
           </Link>
         </p>
       </div>

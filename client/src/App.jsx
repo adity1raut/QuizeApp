@@ -1,26 +1,26 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
 import {
   ProtectedRoute,
   AdminRoute,
   RoleBasedRedirect,
-  UnauthorizedPage
-} from './contexts/ProtectedRoute';
-import SignupPage from './pages/SignUpPage/SignUpPage';
-import LoginPage from './pages/LoginPage/LoginPage';
-import ProfilePage from './pages/ProfilePage/ProfilePage';
-import Navbar from './components/Navbar/Navbar';
-import AdminDashboard from './pages/AdminPAge/AdminMain';
-import QuizDetail from './pages/AdminPAge/QuizDetail';
-import QuestionsManagement from './pages/AdminPAge/QuestionsManagement';
-import Quiz from './pages/UserPage/Quiz';
-import Results from './pages/UserPage/Result';
-import Submissions from './pages/UserPage/Submissions';
-import SubmissionDetails from './pages/UserPage/SubmissionDetails';
-import QuizStatsPage from './pages/AdminPAge/QuizStatsPage';
-import ActiveQuizzesPage from './pages/UserPage/ActiveQuizzesPage';
-import { HomePage , NotFoundPage} from './pages/ExtraPage/Homepage';
+  UnauthorizedPage,
+} from "./contexts/ProtectedRoute";
+import SignupPage from "./pages/SignUpPage/SignUpPage";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import Navbar from "./components/Navbar/Navbar";
+import AdminDashboard from "./pages/AdminPAge/AdminMain";
+import QuizDetail from "./pages/AdminPAge/QuizDetail";
+import QuestionsManagement from "./pages/AdminPAge/QuestionsManagement";
+import Quiz from "./pages/UserPage/Quiz";
+import Results from "./pages/UserPage/Result";
+import Submissions from "./pages/UserPage/Submissions";
+import SubmissionDetails from "./pages/UserPage/SubmissionDetails";
+import QuizStatsPage from "./pages/AdminPAge/QuizStatsPage";
+import ActiveQuizzesPage from "./pages/UserPage/ActiveQuizzesPage";
+import { HomePage, NotFoundPage } from "./pages/ExtraPage/Homepage";
 
 export default function App() {
   return (
@@ -32,7 +32,7 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/login" element={<LoginPage />} />
-            
+
             <Route
               path="/profile"
               element={
@@ -41,7 +41,7 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
-            
+
             <Route
               path="/admin/dashboard"
               element={
@@ -58,7 +58,7 @@ export default function App() {
                 </AdminRoute>
               }
             />
-             <Route
+            <Route
               path="/admin/quiz/:quizId/stats"
               element={
                 <AdminRoute>
@@ -78,11 +78,11 @@ export default function App() {
               path="/quiz"
               element={
                 <ProtectedRoute>
-                  <ActiveQuizzesPage/>
+                  <ActiveQuizzesPage />
                 </ProtectedRoute>
               }
             />
-            
+
             <Route
               path="/quiz/:id"
               element={
@@ -115,17 +115,11 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
-            
-            <Route
-              path="/dashboard"
-              element={<RoleBasedRedirect />}
-            />
-            
-            <Route
-              path="/unauthorized"
-              element={<UnauthorizedPage />}
-            />
-            
+
+            <Route path="/dashboard" element={<RoleBasedRedirect />} />
+
+            <Route path="/unauthorized" element={<UnauthorizedPage />} />
+
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>

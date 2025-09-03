@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import { 
-  Menu, 
-  X, 
-  Home, 
-  LogOut, 
-  User, 
-  BarChart3, 
-  FileText, 
+import {
+  Menu,
+  X,
+  Home,
+  LogOut,
+  User,
+  BarChart3,
+  FileText,
   ClipboardList,
-  Shield
-} from 'lucide-react';
+  Shield,
+} from "lucide-react";
 
 const Navbar = () => {
   const { isAuthenticated, logout, loading, user, isAdmin, isUser } = useAuth();
@@ -20,7 +20,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     await logout();
-    navigate('/login');
+    navigate("/login");
     setIsMobileMenuOpen(false);
   };
 
@@ -28,9 +28,12 @@ const Navbar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const linkStyles = "flex items-center text-gray-300 hover:text-white transition-colors duration-200 py-2 px-3 rounded-md";
-  const buttonStyles = "flex items-center justify-center py-2 px-4 rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-300";
-  const logoutButtonStyles = "flex items-center justify-center py-2 px-4 rounded-md text-white bg-red-600 hover:bg-red-700 transition-colors duration-300";
+  const linkStyles =
+    "flex items-center text-gray-300 hover:text-white transition-colors duration-200 py-2 px-3 rounded-md";
+  const buttonStyles =
+    "flex items-center justify-center py-2 px-4 rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-300";
+  const logoutButtonStyles =
+    "flex items-center justify-center py-2 px-4 rounded-md text-white bg-red-600 hover:bg-red-700 transition-colors duration-300";
 
   if (loading) {
     return (
@@ -43,7 +46,10 @@ const Navbar = () => {
     <nav className="bg-gray-900 shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/admin/dashboard" className="flex items-center text-2xl font-bold text-white">
+          <Link
+            to="/admin/dashboard"
+            className="flex items-center text-2xl font-bold text-white"
+          >
             <Shield className="mr-2 h-6 w-6" />
             Admin Panel
           </Link>
@@ -73,7 +79,11 @@ const Navbar = () => {
               onClick={toggleMobileMenu}
               className="text-gray-300 hover:text-white focus:outline-none"
             >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </button>
           </div>
         </div>
@@ -81,16 +91,16 @@ const Navbar = () => {
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden bg-gray-800 px-2 pt-2 pb-4 space-y-2 shadow-lg rounded-b-md">
-            <Link 
-              to="/admin/dashboard" 
+            <Link
+              to="/admin/dashboard"
               className={`block ${linkStyles}`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <BarChart3 className="mr-2 h-5 w-5" />
               Dashboard
             </Link>
-            <Link 
-              to="/profile" 
+            <Link
+              to="/profile"
               className={`block ${linkStyles}`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -100,8 +110,8 @@ const Navbar = () => {
             <div className="px-3 py-2 text-gray-400 text-sm border-t border-gray-700 mt-2">
               Welcome, {user?.name || user?.email}
             </div>
-            <button 
-              onClick={handleLogout} 
+            <button
+              onClick={handleLogout}
               className={`block w-full text-left ${logoutButtonStyles}`}
             >
               <LogOut className="mr-2 h-5 w-5" />
@@ -118,9 +128,12 @@ const Navbar = () => {
     <nav className="bg-gray-900 shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center text-xl font-bold text-white">
+          <Link
+            to="/"
+            className="flex items-center text-xl font-bold text-white"
+          >
             <Home className="mr-2 h-6 w-6" />
-            MyApp
+            QuizeApp
           </Link>
 
           {/* Desktop Menu */}
@@ -156,7 +169,11 @@ const Navbar = () => {
               onClick={toggleMobileMenu}
               className="text-gray-300 hover:text-white focus:outline-none"
             >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </button>
           </div>
         </div>
@@ -164,32 +181,32 @@ const Navbar = () => {
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden bg-gray-800 px-2 pt-2 pb-4 space-y-2 shadow-lg rounded-b-md">
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className={`block ${linkStyles}`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <Home className="mr-2 h-5 w-5" />
               Home
             </Link>
-            <Link 
-              to="/quiz" 
+            <Link
+              to="/quiz"
               className={`block ${linkStyles}`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <FileText className="mr-2 h-5 w-5" />
               Quizzes
             </Link>
-            <Link 
-              to="/submissions" 
+            <Link
+              to="/submissions"
               className={`block ${linkStyles}`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <ClipboardList className="mr-2 h-5 w-5" />
               My Submissions
             </Link>
-            <Link 
-              to="/profile" 
+            <Link
+              to="/profile"
               className={`block ${linkStyles}`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -199,8 +216,8 @@ const Navbar = () => {
             <div className="px-3 py-2 text-gray-400 text-sm border-t border-gray-700 mt-2">
               Hi, {user?.name || user?.email}
             </div>
-            <button 
-              onClick={handleLogout} 
+            <button
+              onClick={handleLogout}
               className={`block w-full text-left ${logoutButtonStyles}`}
             >
               <LogOut className="mr-2 h-5 w-5" />
@@ -217,7 +234,10 @@ const Navbar = () => {
     <nav className="bg-gray-900 shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center text-xl font-bold text-white">
+          <Link
+            to="/"
+            className="flex items-center text-xl font-bold text-white"
+          >
             <Home className="mr-2 h-6 w-6" />
             MyApp
           </Link>
@@ -242,7 +262,11 @@ const Navbar = () => {
               onClick={toggleMobileMenu}
               className="text-gray-300 hover:text-white focus:outline-none"
             >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </button>
           </div>
         </div>
@@ -250,23 +274,23 @@ const Navbar = () => {
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden bg-gray-800 px-2 pt-2 pb-4 space-y-2 shadow-lg rounded-b-md">
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className={`block ${linkStyles}`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <Home className="mr-2 h-5 w-5" />
               Home
             </Link>
-            <Link 
-              to="/login" 
+            <Link
+              to="/login"
               className={`block ${linkStyles}`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Login
             </Link>
-            <Link 
-              to="/signup" 
+            <Link
+              to="/signup"
               className={`block ${buttonStyles} mt-2`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -283,7 +307,10 @@ const Navbar = () => {
     <nav className="bg-gray-900 shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center text-xl font-bold text-white">
+          <Link
+            to="/"
+            className="flex items-center text-xl font-bold text-white"
+          >
             <Home className="mr-2 h-6 w-6" />
             MyApp
           </Link>
@@ -309,7 +336,11 @@ const Navbar = () => {
               onClick={toggleMobileMenu}
               className="text-gray-300 hover:text-white focus:outline-none"
             >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </button>
           </div>
         </div>
@@ -317,8 +348,8 @@ const Navbar = () => {
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden bg-gray-800 px-2 pt-2 pb-4 space-y-2 shadow-lg rounded-b-md">
-            <Link 
-              to="/profile" 
+            <Link
+              to="/profile"
               className={`block ${linkStyles}`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -328,8 +359,8 @@ const Navbar = () => {
             <div className="px-3 py-2 text-gray-400 text-sm border-t border-gray-700 mt-2">
               Welcome, {user?.name || user?.email}
             </div>
-            <button 
-              onClick={handleLogout} 
+            <button
+              onClick={handleLogout}
               className={`block w-full text-left ${logoutButtonStyles}`}
             >
               <LogOut className="mr-2 h-5 w-5" />
