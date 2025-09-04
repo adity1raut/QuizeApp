@@ -53,6 +53,66 @@ export const getGlobalLeaderboard = async (req, res) => {
     }
 };
 
+
+export const getQuizLeaderboard = async (req, res) => {
+    try {
+        const { limit = 10 } = req.query;
+        const { quizId } = req.params;
+
+        // Validate ObjectId format
+        if (!mongoose.Types.ObjectId.isValid(quizId)) {
+            return res.status(400).json({ message: 'Invalid quiz ID format' });
+        }
+
+        const leaderboard = await Submission.aggregate([
+            { $match: { quiz: new mongoose.Types.ObjectId(quizId) } },
+            { $sort: { score: -1, createdAt: 1 } },
+            {
+                $group: {
+                    _id: '$user',
+                    bestScore: { $first: '$score' },
+                    bestScoreDate: { $first: '$createdAt' },
+                    totalAttempts: { $sum: 1 }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'user'
+                }
+            },
+            { $unwind: '$user' },
+            {
+                $project: {
+                    username: '$user.username',
+                    bestScore: 1,
+                    bestScoreDate: 1,
+                    totalAttempts: 1
+                }
+            },
+            { $sort: { bestScore: -1 } },
+            { $limit: parseInt(limit) }
+        ]);
+
+        const rankedLeaderboard = leaderboard.map((user, index) => ({
+            ...user,
+            rank: index + 1
+        }));
+
+        res.json({
+            leaderboard: rankedLeaderboard,
+            quizId,
+            totalParticipants: leaderboard.length
+        });
+    } catch (error) {
+        console.error('Quiz leaderboard error:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
+
 export const getUserStats = async (req, res) => {
     try {
         // Check if userId is provided in params, otherwise use authenticated user's ID
@@ -159,65 +219,6 @@ export const getUserStats = async (req, res) => {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
-
-export const getQuizLeaderboard = async (req, res) => {
-    try {
-        const { limit = 10 } = req.query;
-        const { quizId } = req.params;
-
-        // Validate ObjectId format
-        if (!mongoose.Types.ObjectId.isValid(quizId)) {
-            return res.status(400).json({ message: 'Invalid quiz ID format' });
-        }
-
-        const leaderboard = await Submission.aggregate([
-            { $match: { quiz: new mongoose.Types.ObjectId(quizId) } },
-            { $sort: { score: -1, createdAt: 1 } },
-            {
-                $group: {
-                    _id: '$user',
-                    bestScore: { $first: '$score' },
-                    bestScoreDate: { $first: '$createdAt' },
-                    totalAttempts: { $sum: 1 }
-                }
-            },
-            {
-                $lookup: {
-                    from: 'users',
-                    localField: '_id',
-                    foreignField: '_id',
-                    as: 'user'
-                }
-            },
-            { $unwind: '$user' },
-            {
-                $project: {
-                    username: '$user.username',
-                    bestScore: 1,
-                    bestScoreDate: 1,
-                    totalAttempts: 1
-                }
-            },
-            { $sort: { bestScore: -1 } },
-            { $limit: parseInt(limit) }
-        ]);
-
-        const rankedLeaderboard = leaderboard.map((user, index) => ({
-            ...user,
-            rank: index + 1
-        }));
-
-        res.json({
-            leaderboard: rankedLeaderboard,
-            quizId,
-            totalParticipants: leaderboard.length
-        });
-    } catch (error) {
-        console.error('Quiz leaderboard error:', error);
-        res.status(500).json({ message: 'Server error', error: error.message });
-    }
-};
-
 // Additional helper function to get user rank
 export const getUserRank = async (req, res) => {
     try {
