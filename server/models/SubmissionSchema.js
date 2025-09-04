@@ -1,32 +1,37 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const submissionSchema = new Schema({
+const submissionSchema = new Schema(
+  {
     quiz: {
-        type: Schema.Types.ObjectId,
-        ref: 'Quiz',
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: "Quiz",
+      required: true,
     },
     user: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    answers: [{
+    answers: [
+      {
         questionId: {
-            type: Schema.Types.ObjectId,
-            ref: 'Question'
+          type: Schema.Types.ObjectId,
+          ref: "Question",
         },
-        selectedAnswer: String
-    }],
+        selectedAnswer: String,
+      },
+    ],
     score: {
-        type: Number,
-        required: true
-    }
-}, {
+      type: Number,
+      required: true,
+    },
+  },
+  {
     timestamps: true,
-});
+  },
+);
 
-const Submission = mongoose.model('Submission', submissionSchema);
+const Submission = mongoose.model("Submission", submissionSchema);
 
 export default Submission;

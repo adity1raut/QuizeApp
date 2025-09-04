@@ -1,6 +1,13 @@
 import express from "express";
-import { signupUser, verifyOtpAndCreateUser } from "../controllers/signupUser/SignUpUser.js";
-import { getUserProfile, updateUserProfile, deleteUserProfile } from "../controllers/UserWork/profileUser.js";
+import {
+  signupUser,
+  verifyOtpAndCreateUser,
+} from "../controllers/signupUser/SignUpUser.js";
+import {
+  getUserProfile,
+  updateUserProfile,
+  deleteUserProfile,
+} from "../controllers/UserWork/profileUser.js";
 import { loginUser, logoutUser } from "../controllers/loginUser/loginUser.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 
@@ -61,13 +68,9 @@ router
 /* ================================
    ADMIN QUIZ MANAGEMENT
 ================================ */
-router
-  .route("/api/admin/quiz")
-  .post(protect, admin, createQuiz);
+router.route("/api/admin/quiz").post(protect, admin, createQuiz);
 
-router
-  .route("/api/admin/quizzes")
-  .get(protect, admin, getAdminQuizzes);
+router.route("/api/admin/quizzes").get(protect, admin, getAdminQuizzes);
 
 router
   .route("/api/admin/quiz/:quizId")
@@ -75,7 +78,12 @@ router
   .put(protect, admin, updateQuiz)
   .delete(protect, admin, deleteQuiz);
 
-router.patch("/api/admin/quiz/:quizId/status", protect, admin, updateQuizStatus);
+router.patch(
+  "/api/admin/quiz/:quizId/status",
+  protect,
+  admin,
+  updateQuizStatus,
+);
 router.get("/api/admin/quiz/:quizId/stats", protect, admin, getQuizStats);
 
 /* ================================
@@ -102,8 +110,18 @@ router.get("/api/admin/analytics", protect, admin, getAnalytics);
 /* ================================
    ADMIN LEADERBOARD
 ================================ */
-router.get("/api/admin/leaderboard/global", protect, admin, getGlobalLeaderboard);
-router.get("/api/admin/leaderboard/quiz/:quizId", protect, admin, getQuizLeaderboard);
+router.get(
+  "/api/admin/leaderboard/global",
+  protect,
+  admin,
+  getGlobalLeaderboard,
+);
+router.get(
+  "/api/admin/leaderboard/quiz/:quizId",
+  protect,
+  admin,
+  getQuizLeaderboard,
+);
 
 /* ================================
    USER QUIZ ROUTES

@@ -1,13 +1,13 @@
 import express from "express";
-import cookieParser from 'cookie-parser';
-import cors from 'cors' ;
-import ConnectDB from "./config/ConnectDB.js"
-import dotenv from "dotenv"
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import ConnectDB from "./config/ConnectDB.js";
+import dotenv from "dotenv";
 import router from "./router/RouterPage.js";
 
-dotenv.config() ;
+dotenv.config();
 const app = express();
-const PORT = process.env.PORT ;
+const PORT = process.env.PORT;
 
 app.use(cors());
 
@@ -17,12 +17,12 @@ app.use(cookieParser());
 
 ConnectDB();
 
-app.get('/', (req, res) => {
-    res.send('API is running...');
+app.get("/", (req, res) => {
+  res.send("API is running...");
 });
 
-app.use(router)
+app.use(router);
 
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
