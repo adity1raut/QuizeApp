@@ -22,7 +22,10 @@ import {
     submitQuiz,
     getUserSubmissions,
     getSubmissionDetails
-} from "../controllers/UserWork/UserControl.js"; 
+} from "../controllers/UserWork/UserControl.js";
+
+import { getGlobalLeaderboard, getQuizLeaderboard, getUserStats } from "../controllers/Admin/leaderboardController.js";
+import { getUsers, updateUserRole, deleteUser, getAnalytics } from "../controllers/Admin/UserControl.js";
 
 const router = express.Router();
 
@@ -65,6 +68,16 @@ router.route('/api/admin/question/:questionId')
     .put(protect, admin, updateQuestion)
     .delete(protect, admin, deleteQuestion);
 
+// --- Admin User Management Routes ---
+router.get('/api/admin/users', protect, admin, getUsers);
+router.put('/api/admin/users/:id/role', protect, admin, updateUserRole);
+router.delete('/api/admin/users/:id', protect, admin, deleteUser);
+router.get('/api/admin/analytics', protect, admin, getAnalytics);
+
+// --- Admin Leaderboard Routes ---
+router.get('/api/admin/leaderboard/global', protect, admin, getGlobalLeaderboard);
+router.get('/api/admin/leaderboard/quiz/:quizId', protect, admin, getQuizLeaderboard);
+
 // --- User-Facing Quiz Routes ---
 router.route('/api/quizzes')
     .get(protect, getActiveQuizzes);
@@ -81,5 +94,9 @@ router.route('/api/my-submissions')
 router.route('/api/submission/:id')
     .get(protect, getSubmissionDetails);
 
+// --- User Stats Routes (Fixed) ---
+// Most specific routes first, then more general ones
+router.get('/api/stats/:userId', protect, getUserStats);  // For specific user stats
+router.get('/api/stats', protect, getUserStats);          // For current user stats
 
 export default router;

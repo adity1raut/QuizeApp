@@ -10,16 +10,20 @@ import {
 
 import SignupPage from "./pages/SignUpPage/SignUpPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
+
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
-import AdminDashboard from "./pages/AdminPAge/AdminMain";
-import QuizDetail from "./pages/AdminPAge/QuizDetail";
-import QuestionsManagement from "./pages/AdminPAge/QuestionsManagement";
 import Quiz from "./pages/UserPage/Quiz";
 import Results from "./pages/UserPage/Result";
 import Submissions from "./pages/UserPage/Submissions";
-import SubmissionDetails from "./pages/UserPage/SubmissionDetails";
-import QuizStatsPage from "./pages/AdminPAge/QuizStatsPage";
 import ActiveQuizzesPage from "./pages/UserPage/ActiveQuizzesPage";
+import SubmissionDetails from "./pages/UserPage/SubmissionDetails";
+
+import QuizStatsPage from "./pages/AdminPAge/QuizStatsPage";
+import AdminDashboard from "./pages/AdminPAge/AdminMain";
+import QuizDetail from "./pages/AdminPAge/QuizDetail";
+import QuestionsManagement from "./pages/AdminPAge/QuestionsManagement";
+
+
 import { HomePage, NotFoundPage } from "./pages/ExtraPage/Homepage";
 import Sidebar from "./components/Sidebar/Sidebar";
 import GlobalStyles from "./components/Sidebar/GlobalStyles";
