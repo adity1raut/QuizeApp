@@ -66,7 +66,7 @@ const Sidebar = () => {
       return [
         { to: "/admin/dashboard", icon: BarChart3, label: "Dashboard" },
         { to: "/admin/users", icon: User, label: "User Management" },
-        { to: "/admin/analytics", icon: BarChart3, label: "Analytics" },
+        { to: "/admin/leaderboard", icon: BarChart3, label: "Leaderboard" },
         { to: "/profile", icon: User, label: "Profile" }
       ];
     }
@@ -76,7 +76,7 @@ const Sidebar = () => {
         { to: "/", icon: Home, label: "Home" },
         { to: "/quiz", icon: Brain, label: "Quizzes" },
         { to: "/submissions", icon: ClipboardList, label: "My Submissions" },
-        { to: "/leaderboard", icon: BarChart3, label: "Leaderboard" },
+        { to: "/dhashboard", icon: BarChart3, label: "Dhashboard" },
         { to: "/profile", icon: User, label: "Profile" }
       ];
     }

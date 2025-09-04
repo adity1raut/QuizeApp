@@ -22,12 +22,14 @@ import QuizStatsPage from "./pages/AdminPAge/QuizStatsPage";
 import AdminDashboard from "./pages/AdminPAge/AdminMain";
 import QuizDetail from "./pages/AdminPAge/QuizDetail";
 import QuestionsManagement from "./pages/AdminPAge/QuestionsManagement";
+import AdminLeaderboard from "./pages/AdminPAge/AdminLeaderboard";
 
 
 import { HomePage, NotFoundPage } from "./pages/ExtraPage/Homepage";
 import Sidebar from "./components/Sidebar/Sidebar";
 import GlobalStyles from "./components/Sidebar/GlobalStyles";
 import UserManagement from "./pages/AdminPAge/UserManagment";
+import UserStatsDashboard from "./pages/UserPage/UserStatsDashboard";
 
 const App = () => {
   return (
@@ -53,6 +55,14 @@ const App = () => {
                   element={
                     <ProtectedRoute>
                       <ProfilePage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/dhashboard" 
+                  element={
+                    <ProtectedRoute>
+                      <UserStatsDashboard />
                     </ProtectedRoute>
                   } 
                 />
@@ -137,6 +147,14 @@ const App = () => {
                   element={
                     <AdminRoute>
                       <UserManagement />
+                    </AdminRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin/leaderboard" 
+                  element={
+                    <AdminRoute>
+                      <AdminLeaderboard/>
                     </AdminRoute>
                   } 
                 />
