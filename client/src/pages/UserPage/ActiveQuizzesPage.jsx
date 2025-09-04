@@ -5,16 +5,16 @@ import {
   User,
   Clock,
   Eye,
-  Loader2,
   AlertCircle,
   Search,
   Filter,
   ChevronRight,
   LogIn,
-  Shield,
+  Trophy,
+  Activity
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom"; 
 
 const ActiveQuizzesPage = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -23,7 +23,7 @@ const ActiveQuizzesPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("newest");
   const { isAuthenticated, loading: authLoading } = useAuth();
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!authLoading) {
@@ -41,7 +41,7 @@ const ActiveQuizzesPage = () => {
       setError("");
 
       const response = await fetch("/api/quizzes", {
-        credentials: "include", // Include cookies for authentication
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -92,7 +92,6 @@ const ActiveQuizzesPage = () => {
     return formatDate(dateString);
   };
 
-  // Function to handle starting a quiz
   const handleStartQuiz = (quizId) => {
     navigate(`/quiz/${quizId}`);
   };
@@ -119,10 +118,10 @@ const ActiveQuizzesPage = () => {
   // Show loading while checking authentication
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
-        <div className="flex flex-col items-center">
-          <Loader2 className="h-12 w-12 animate-spin text-purple-500" />
-          <p className="mt-4 text-lg">Checking authentication...</p>
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+          <p className="mt-4 text-gray-400">Checking authentication...</p>
         </div>
       </div>
     );
@@ -131,16 +130,16 @@ const ActiveQuizzesPage = () => {
   // Show login prompt if not authenticated
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
-        <div className="max-w-md p-6 bg-gray-800 rounded-lg shadow-lg text-center">
-          <LogIn className="h-12 w-12 text-purple-500 mx-auto mb-4" />
-          <h2 className="text-xl font-bold mb-2">Authentication Required</h2>
-          <p className="text-gray-300 mb-4">
-            Please log in to view active quizzes
-          </p>
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="bg-gray-800 rounded-lg border border-red-800/50 p-8 max-w-md text-center">
+          <div className="text-red-400 mb-4">
+            <Activity size={48} className="mx-auto" />
+          </div>
+          <h3 className="text-lg font-semibold text-white mb-2">Authentication Required</h3>
+          <p className="text-gray-400 mb-4">Please log in to view active quizzes</p>
           <button
             onClick={() => (window.location.href = "/login")}
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-md flex items-center justify-center mx-auto"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
             <LogIn className="h-4 w-4 mr-2" />
             Go to Login
@@ -152,10 +151,10 @@ const ActiveQuizzesPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
-        <div className="flex flex-col items-center">
-          <Loader2 className="h-12 w-12 animate-spin text-purple-500" />
-          <p className="mt-4 text-lg">Loading active quizzes...</p>
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+          <p className="mt-4 text-gray-400">Loading active quizzes...</p>
         </div>
       </div>
     );
@@ -163,16 +162,17 @@ const ActiveQuizzesPage = () => {
 
   if (error && !quizzes.length) {
     return (
-      <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
-        <div className="max-w-md p-6 bg-gray-800 rounded-lg shadow-lg text-center">
-          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-bold mb-2">Error Loading Quizzes</h2>
-          <p className="text-gray-300 mb-4">{error}</p>
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="bg-gray-800 rounded-lg border border-red-800/50 p-8 max-w-md text-center">
+          <div className="text-red-400 mb-4">
+            <Activity size={48} className="mx-auto" />
+          </div>
+          <h3 className="text-lg font-semibold text-white mb-2">Error Loading Quizzes</h3>
+          <p className="text-gray-400 mb-4">{error}</p>
           <button
             onClick={fetchActiveQuizzes}
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-md flex items-center justify-center mx-auto"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
-            <Loader2 className="h-4 w-4 mr-2" />
             Try Again
           </button>
         </div>
@@ -181,67 +181,65 @@ const ActiveQuizzesPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <div>
-            <h1 className="text-3xl font-bold flex items-center">
-              <BookOpen className="h-8 w-8 mr-3 text-purple-500" />
-              Active Quizzes
-            </h1>
-            <p className="text-gray-400 mt-2">
-              {quizzes.length} active quiz{quizzes.length !== 1 ? "zes" : ""}{" "}
-              available
-            </p>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white flex items-center">
+            <BookOpen className="h-8 w-8 mr-3 text-blue-400" />
+            Active Quizzes
+          </h1>
+          <p className="text-gray-400 mt-2">
+            {quizzes.length} active quiz{quizzes.length !== 1 ? "zes" : ""} available
+          </p>
+        </div>
+
+        {/* Search and Filter */}
+        <div className="flex flex-col md:flex-row gap-4 mb-8">
+          {/* Search Input */}
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search quizzes..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full text-white"
+            />
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-            {/* Search Input */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search quizzes..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 w-full"
-              />
-            </div>
-
-            {/* Sort Dropdown */}
-            <div className="relative">
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="pl-10 pr-8 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 appearance-none w-full"
+          {/* Sort Dropdown */}
+          <div className="relative w-full md:w-48">
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="pl-10 pr-8 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none w-full text-white"
+            >
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="title">Alphabetical</option>
+            </select>
+            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
+              <svg
+                className="h-4 w-4 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                <option value="newest">Newest First</option>
-                <option value="oldest">Oldest First</option>
-                <option value="title">Alphabetical</option>
-              </select>
-              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <div className="absolute right-2 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                <svg
-                  className="h-4 w-4 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
             </div>
           </div>
         </div>
 
         {error && (
-          <div className="bg-red-900/30 border border-red-700 rounded-lg p-4 mb-6 flex items-center">
+          <div className="bg-red-900/20 border border-red-700/30 rounded-lg p-4 mb-6 flex items-center">
             <AlertCircle className="h-5 w-5 text-red-400 mr-2" />
             <span className="text-red-200">{error}</span>
           </div>
@@ -249,24 +247,18 @@ const ActiveQuizzesPage = () => {
 
         {/* Quizzes Grid */}
         {filteredAndSortedQuizzes.length === 0 ? (
-          <div className="bg-gray-800 rounded-lg p-12 text-center">
+          <div className="bg-gray-800 rounded-lg border border-gray-700 p-12 text-center">
             {searchTerm ? (
               <>
-                <Search className="h-16 w-16 text-gray-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">
-                  No matching quizzes found
-                </h3>
+                <Search className="h-16 w-16 text-gray-500 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-white mb-2">No matching quizzes found</h3>
                 <p className="text-gray-400">Try adjusting your search terms</p>
               </>
             ) : (
               <>
-                <BookOpen className="h-16 w-16 text-gray-600 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">
-                  No active quizzes available
-                </h3>
-                <p className="text-gray-400">
-                  Check back later for new quizzes
-                </p>
+                <BookOpen className="h-16 w-16 text-gray-500 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-white mb-2">No active quizzes available</h3>
+                <p className="text-gray-400">Check back later for new quizzes</p>
               </>
             )}
           </div>
@@ -275,7 +267,7 @@ const ActiveQuizzesPage = () => {
             {filteredAndSortedQuizzes.map((quiz) => (
               <div
                 key={quiz._id}
-                className="bg-gray-800 rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow duration-200 group"
+                className="bg-gray-800 rounded-lg border border-gray-700 p-6 shadow-sm hover:shadow-md transition-shadow hover:border-gray-600"
               >
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex items-center">
@@ -288,7 +280,7 @@ const ActiveQuizzesPage = () => {
                   </div>
                 </div>
 
-                <h3 className="text-xl font-semibold mb-3 group-hover:text-purple-400 transition-colors duration-200">
+                <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-blue-400 transition-colors">
                   {quiz.title}
                 </h3>
 
@@ -310,7 +302,7 @@ const ActiveQuizzesPage = () => {
 
                 <button
                   onClick={() => handleStartQuiz(quiz._id)}
-                  className="w-full mt-4 bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg flex items-center justify-center group-hover:bg-purple-700 transition-colors duration-200"
+                  className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg flex items-center justify-center transition-colors"
                 >
                   Start Quiz
                   <ChevronRight className="h-4 w-4 ml-2" />
@@ -323,8 +315,7 @@ const ActiveQuizzesPage = () => {
         {/* Results Count */}
         {filteredAndSortedQuizzes.length > 0 && searchTerm && (
           <div className="mt-6 text-center text-gray-400">
-            Showing {filteredAndSortedQuizzes.length} of {quizzes.length}{" "}
-            quizzes
+            Showing {filteredAndSortedQuizzes.length} of {quizzes.length} quizzes
             {searchTerm && ` matching "${searchTerm}"`}
           </div>
         )}

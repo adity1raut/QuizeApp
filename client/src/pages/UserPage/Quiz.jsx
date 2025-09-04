@@ -3,19 +3,17 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   ArrowLeft,
-  ArrowRight,
   CheckCircle,
   Circle,
   Clock,
   AlertCircle,
-  Loader2,
   Send,
   BarChart3,
   Brain,
   Trophy,
-  HelpCircle,
   ChevronRight,
-  ChevronLeft
+  ChevronLeft,
+  Activity
 } from "lucide-react";
 
 const Quiz = () => {
@@ -134,13 +132,10 @@ const Quiz = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="text-center">
-          <div className="relative">
-            <Loader2 className="h-14 w-14 text-blue-500 animate-spin mx-auto" />
-            <div className="absolute inset-0 bg-blue-500/20 rounded-full animate-ping"></div>
-          </div>
-          <p className="mt-4 text-gray-300 text-lg">Loading your quiz...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+          <p className="mt-4 text-gray-400">Loading your quiz...</p>
         </div>
       </div>
     );
@@ -148,18 +143,16 @@ const Quiz = () => {
 
   if (error || !quiz) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center p-4">
-        <div className="text-center max-w-md bg-gray-800/70 backdrop-blur-sm rounded-xl shadow-2xl p-8 border border-gray-700">
-          <div className="relative mb-4">
-            <AlertCircle className="h-14 w-14 text-red-400 mx-auto" />
-            <div className="absolute -inset-2 bg-red-500/10 rounded-full animate-pulse"></div>
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="bg-gray-800 rounded-lg border border-red-800/50 p-8 max-w-md text-center">
+          <div className="text-red-400 mb-4">
+            <Activity size={48} className="mx-auto" />
           </div>
-          <p className="mt-4 text-red-300 text-xl mb-6">
-            {error || "Quiz not found"}
-          </p>
+          <h3 className="text-lg font-semibold text-white mb-2">Error Loading Quiz</h3>
+          <p className="text-gray-400 mb-4">{error || "Quiz not found"}</p>
           <button
             onClick={() => navigate("/")}
-            className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-blue-500/20"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
             Return Home
           </button>
@@ -173,7 +166,7 @@ const Quiz = () => {
   const answeredCount = Object.keys(answers).length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100 py-8 px-4">
+    <div className="min-h-screen bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -185,14 +178,14 @@ const Quiz = () => {
             Back to Quizzes
           </button>
 
-          <div className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700 shadow-lg">
+          <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 shadow-sm">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between">
               <div className="mb-4 md:mb-0">
                 <h1 className="text-3xl font-bold text-white mb-2 flex items-center">
-                  <Brain className="h-8 w-8 text-blue-400 mr-3" />
+                  <Brain className="h-8 w-8 mr-3 text-blue-400" />
                   {quiz.title}
                 </h1>
-                <p className="text-gray-400 text-lg">{quiz.description}</p>
+                <p className="text-gray-400">{quiz.description}</p>
               </div>
               
               <div className="flex flex-col sm:flex-row sm:items-center gap-4">
@@ -203,7 +196,7 @@ const Quiz = () => {
                 
                 {timeRemaining !== null && (
                   <div className={`flex items-center px-3 py-2 rounded-lg ${
-                    timeRemaining < 60 ? 'bg-red-900/30 text-red-300 animate-pulse' : 'bg-purple-900/30 text-purple-300'
+                    timeRemaining < 60 ? 'bg-red-900/30 text-red-300' : 'bg-blue-900/30 text-blue-300'
                   }`}>
                     <Clock className="h-5 w-5 mr-2" />
                     <span className="font-mono">{formatTime(timeRemaining)}</span>
@@ -215,8 +208,8 @@ const Quiz = () => {
         </div>
 
         {/* Progress bar */}
-        <div className="mb-8 bg-gray-800/50 backdrop-blur-sm rounded-xl p-5 border border-gray-700 shadow">
-          <div className="flex justify-between mb-3">
+        <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 mb-8 shadow-sm">
+          <div className="flex justify-between mb-4">
             <span className="text-sm font-medium text-gray-300">
               Question {currentQuestion + 1} of {quiz.questions.length}
             </span>
@@ -224,24 +217,24 @@ const Quiz = () => {
               {Math.round(progress)}% Complete
             </span>
           </div>
-          <div className="w-full bg-gray-700 rounded-full h-2.5 mb-2">
+          <div className="w-full bg-gray-700 rounded-full h-2.5 mb-4">
             <div
-              className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2.5 rounded-full transition-all duration-500 shadow-md"
+              className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
           
           {/* Question navigation dots */}
-          <div className="flex justify-center mt-4 space-x-2">
+          <div className="flex justify-center space-x-2">
             {quiz.questions.map((q, index) => (
               <button
                 key={q._id}
                 onClick={() => handleQuestionNav(index)}
-                className={`h-3 w-3 rounded-full transition-all ${
+                className={`h-2 w-2 rounded-full transition-all ${
                   answers[q._id]
                     ? "bg-green-400"
                     : index === currentQuestion
-                      ? "bg-blue-400 ring-2 ring-blue-500 ring-opacity-50"
+                      ? "bg-blue-400"
                       : "bg-gray-600 hover:bg-gray-500"
                 }`}
                 title={`Question ${index + 1}: ${answers[q._id] ? 'Answered' : 'Unanswered'}`}
@@ -251,9 +244,9 @@ const Quiz = () => {
         </div>
 
         {/* Question */}
-        <div className="bg-gray-800/70 backdrop-blur-sm shadow-xl rounded-2xl p-6 mb-8 border border-gray-700 transition-all">
+        <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 mb-8 shadow-sm">
           <div className="flex items-start mb-6">
-            <span className="bg-gradient-to-br from-blue-500 to-indigo-500 h-10 w-10 rounded-full flex items-center justify-center text-white font-bold mr-4 flex-shrink-0 shadow-md">
+            <span className="bg-blue-600 h-10 w-10 rounded-full flex items-center justify-center text-white font-bold mr-4 flex-shrink-0">
               {currentQuestion + 1}
             </span>
             <h3 className="text-xl font-medium text-white pt-1.5">
@@ -265,9 +258,9 @@ const Quiz = () => {
             {question.options.map((option, index) => (
               <div
                 key={index}
-                className={`flex items-start p-4 rounded-xl cursor-pointer transition-all border ${
+                className={`flex items-start p-4 rounded-lg cursor-pointer transition-all border ${
                   answers[question._id] === option
-                    ? "bg-gradient-to-r from-blue-900/40 to-indigo-900/40 border-blue-700/50 shadow-md"
+                    ? "bg-blue-900/30 border-blue-700/50"
                     : "bg-gray-700/50 border-gray-600 hover:bg-gray-700/70 hover:border-gray-500"
                 }`}
                 onClick={() => handleAnswerSelect(question._id, option)}
@@ -279,7 +272,7 @@ const Quiz = () => {
                 )}
                 <label
                   htmlFor={`option-${index}`}
-                  className="block text-gray-100 cursor-pointer select-none text-lg"
+                  className="block text-gray-100 cursor-pointer select-none"
                 >
                   {option}
                 </label>
@@ -304,7 +297,7 @@ const Quiz = () => {
             className={`flex items-center px-5 py-3 rounded-lg font-medium transition-all ${
               currentQuestion === 0
                 ? "bg-gray-800 text-gray-500 cursor-not-allowed"
-                : "bg-gray-700 text-gray-200 hover:bg-gray-600 shadow-md"
+                : "bg-gray-700 text-gray-200 hover:bg-gray-600"
             }`}
           >
             <ChevronLeft className="h-5 w-5 mr-2" />
@@ -314,7 +307,7 @@ const Quiz = () => {
           {currentQuestion < quiz.questions.length - 1 ? (
             <button
               onClick={handleNext}
-              className="flex items-center px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-blue-500/20"
+              className="flex items-center px-5 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
             >
               Next
               <ChevronRight className="h-5 w-5 ml-2" />
@@ -329,12 +322,12 @@ const Quiz = () => {
               className={`flex items-center px-5 py-3 rounded-lg font-medium transition-all ${
                 submitting || answeredCount < quiz.questions.length
                   ? "bg-gray-800 text-gray-500 cursor-not-allowed"
-                  : "bg-gradient-to-r from-green-600 to-teal-600 text-white hover:from-green-700 hover:to-teal-700 shadow-lg hover:shadow-green-500/20"
+                  : "bg-green-600 text-white hover:bg-green-700"
               }`}
             >
               {submitting ? (
                 <>
-                  <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
                   Submitting...
                 </>
               ) : (
@@ -348,11 +341,11 @@ const Quiz = () => {
         </div>
 
         {/* Answer status */}
-        <div className="p-5 bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 shadow">
+        <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center text-gray-300 mb-3 sm:mb-0">
               <BarChart3 className="h-5 w-5 mr-2 text-blue-400" />
-              <span className="text-lg">
+              <span>
                 <span className="font-semibold text-white">{answeredCount}</span> of{" "}
                 <span className="font-semibold text-white">{quiz.questions.length}</span> questions answered
               </span>

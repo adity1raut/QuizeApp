@@ -1,117 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {
-  Container,
-  Typography,
-  Box,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Chip,
-  Card,
-  CardContent,
-  Grid,
-  TextField,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  Tab,
-  Tabs,
-  CircularProgress,
-  Alert,
-  AppBar,
-  Toolbar,
-  Button,
-  Avatar,
-  IconButton,
-  ThemeProvider,
-  createTheme
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { Logout, Dashboard, Leaderboard } from '@mui/icons-material';
 import { useAuth } from '../../contexts/AuthContext';
-
-// Create a dark theme
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#90caf9',
-    },
-    secondary: {
-      main: '#f48fb1',
-    },
-    background: {
-      default: '#121212',
-      paper: '#1e1e1e',
-    },
-    text: {
-      primary: '#ffffff',
-      secondary: 'rgba(255, 255, 255, 0.7)',
-    },
-  },
-  components: {
-    MuiAppBar: {
-      styleOverrides: {
-        root: {
-          backgroundColor: '#0d1117',
-        },
-      },
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          backgroundColor: '#1e1e1e',
-          backgroundImage: 'none',
-        },
-      },
-    },
-    MuiTableHead: {
-      styleOverrides: {
-        root: {
-          backgroundColor: '#252525',
-        },
-      },
-    },
-  },
-});
-
-// Styled components
-const StyledTableRow = styled(TableRow)(({ theme, rank }) => ({
-  backgroundColor: rank === 1 
-    ? 'rgba(255, 215, 0, 0.15)' 
-    : rank === 2 
-      ? 'rgba(192, 192, 192, 0.15)' 
-      : rank === 3 
-        ? 'rgba(205, 127, 50, 0.15)' 
-        : 'transparent',
-  '&:hover': {
-    backgroundColor: theme.palette.action.hover,
-  },
-  '&:last-child td, &:last-child th': {
-    border: 0,
-  },
-}));
-
-const ScoreChip = styled(Chip)(({ score, theme }) => {
-  let color = theme.palette.grey[700];
-  
-  if (score >= 90) color = '#2e7d32';
-  else if (score >= 70) color = '#1565c0';
-  else if (score >= 50) color = '#ed6c02';
-  else color = '#d32f2f';
-  
-  return {
-    backgroundColor: color,
-    color: '#ffffff',
-    fontWeight: 'bold'
-  };
-});
 
 // Tab Panel Component
 function TabPanel({ children, value, index, ...other }) {
@@ -123,10 +12,30 @@ function TabPanel({ children, value, index, ...other }) {
       aria-labelledby={`leaderboard-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <div className="p-6">{children}</div>}
     </div>
   );
 }
+
+// Score Chip Component
+const ScoreChip = ({ score, label, size = 'default' }) => {
+  const getColorClass = (score) => {
+    if (score >= 90) return 'bg-green-800';
+    if (score >= 70) return 'bg-blue-700';
+    if (score >= 50) return 'bg-orange-600';
+    return 'bg-red-700';
+  };
+
+  const sizeClass = size === 'small' ? 'px-2 py-1 text-xs' : 'px-3 py-1';
+
+  return (
+    <span
+      className={`${getColorClass(score)} ${sizeClass} text-white font-bold rounded-full inline-flex items-center justify-center`}
+    >
+      {label}
+    </span>
+  );
+};
 
 // Main Admin Leaderboard Component
 const AdminLeaderboard = () => {
@@ -246,357 +155,349 @@ const AdminLeaderboard = () => {
     });
   };
 
+  const getRankColor = (rank) => {
+    if (rank === 1) return 'bg-yellow-500/20';
+    if (rank === 2) return 'bg-gray-400/20';
+    if (rank === 3) return 'bg-amber-700/20';
+    return 'bg-gray-800 hover:bg-gray-700/50';
+  };
+
+  const getRankBadgeColor = (rank) => {
+    if (rank === 1) return 'bg-yellow-500';
+    if (rank === 2) return 'bg-gray-400';
+    if (rank === 3) return 'bg-amber-700';
+    return 'bg-gray-600';
+  };
+
   // Show loading if still checking authentication
   if (!user) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-        <CircularProgress />
-      </Box>
+      <div className="flex justify-center items-center min-h-screen bg-gray-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
     );
   }
 
   // Show unauthorized message if not admin
   if (!isAdmin()) {
     return (
-      <Container maxWidth="md" sx={{ mt: 4, textAlign: 'center' }}>
-        <Alert severity="error" sx={{ mb: 2 }}>
+      <div className="max-w-md mx-auto mt-16 text-center bg-gray-800 p-6 rounded-lg">
+        <div className="bg-red-900 text-red-200 px-4 py-3 rounded mb-4">
           You don't have permission to access this page.
-        </Alert>
-        <Button variant="contained" onClick={() => window.location.href = '/'}>
+        </div>
+        <button 
+          onClick={() => window.location.href = '/'}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
           Return to Home
-        </Button>
-      </Container>
+        </button>
+      </div>
     );
   }
 
   return (
-    <ThemeProvider theme={darkTheme}>
-      <Box sx={{ backgroundColor: '#121212', minHeight: '100vh', color: 'white' }}>
-        <AppBar position="static" elevation={0}>
-          <Toolbar>
-            <Leaderboard sx={{ mr: 2 }} />
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Quiz Admin Dashboard
-            </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Avatar sx={{ width: 32, height: 32, mr: 1, bgcolor: 'secondary.main' }}>
-                {user.username?.charAt(0).toUpperCase() || 'A'}
-              </Avatar>
-              <Typography variant="body1" sx={{ mr: 2 }}>
-                {user.username} (Admin)
-              </Typography>
-              <IconButton color="inherit" onClick={handleLogout}>
-                <Logout />
-              </IconButton>
-            </Box>
-          </Toolbar>
-        </AppBar>
+    <div className="min-h-screen bg-gray-900 text-white">
+      <div className="container max-w-7xl mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold text-blue-400 mb-6">Admin Leaderboard</h1>
 
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <Typography variant="h4" component="h1" gutterBottom color="primary">
-            Admin Leaderboard
-          </Typography>
+        {error && (
+          <div className="bg-red-900 text-red-200 px-4 py-3 rounded mb-6 relative">
+            <span>{error}</span>
+            <button 
+              onClick={() => setError('')}
+              className="absolute top-0 right-0 p-3"
+            >
+              <svg className="h-5 w-5 text-red-200" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
+        )}
 
-          {error && (
-            <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError('')}>
-              {error}
-            </Alert>
-          )}
-
-          <Paper elevation={3} sx={{ mb: 2 }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-              <Tabs 
-                value={tabValue} 
-                onChange={handleTabChange} 
-                aria-label="leaderboard tabs"
-                textColor="primary"
-                indicatorColor="primary"
+        <div className="bg-gray-800 rounded-lg shadow-lg mb-6">
+          <div className="border-b border-gray-700">
+            <div className="flex -mb-px">
+              <button
+                onClick={() => handleTabChange(null, 0)}
+                className={`py-4 px-6 font-medium text-sm ${tabValue === 0 ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-400 hover:text-white'}`}
               >
-                <Tab label="Global Leaderboard" />
-                <Tab label="Quiz Leaderboard" />
-                <Tab label="User Statistics" />
-              </Tabs>
-            </Box>
-          </Paper>
+                Global Leaderboard
+              </button>
+              <button
+                onClick={() => handleTabChange(null, 1)}
+                className={`py-4 px-6 font-medium text-sm ${tabValue === 1 ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-400 hover:text-white'}`}
+              >
+                Quiz Leaderboard
+              </button>
+              <button
+                onClick={() => handleTabChange(null, 2)}
+                className={`py-4 px-6 font-medium text-sm ${tabValue === 2 ? 'text-blue-400 border-b-2 border-blue-400' : 'text-gray-400 hover:text-white'}`}
+              >
+                User Statistics
+              </button>
+            </div>
+          </div>
+        </div>
 
-          <Paper elevation={2} sx={{ p: 2, mb: 2 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <FormControl sx={{ minWidth: 120 }} size="small">
-                <InputLabel id="limit-select-label" sx={{ color: 'text.primary' }}>Results</InputLabel>
-                <Select
-                  labelId="limit-select-label"
-                  value={limit}
-                  label="Results"
-                  onChange={(e) => setLimit(e.target.value)}
-                  sx={{ color: 'text.primary' }}
-                >
-                  <MenuItem value={5}>Top 5</MenuItem>
-                  <MenuItem value={10}>Top 10</MenuItem>
-                  <MenuItem value={25}>Top 25</MenuItem>
-                  <MenuItem value={50}>Top 50</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-          </Paper>
+        <div className="bg-gray-800 p-4 rounded-lg shadow-md mb-6">
+          <div className="flex justify-end">
+            <div className="relative">
+              <select
+                value={limit}
+                onChange={(e) => setLimit(e.target.value)}
+                className="bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-4 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 pr-8"
+              >
+                <option value={5}>Top 5</option>
+                <option value={10}>Top 10</option>
+                <option value={25}>Top 25</option>
+                <option value={50}>Top 50</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
 
-          <TabPanel value={tabValue} index={0}>
-            <Typography variant="h5" gutterBottom color="primary">
-              Global Leaderboard
-            </Typography>
-            
-            {loading ? (
-              <Box display="flex" justifyContent="center" my={4}>
-                <CircularProgress />
-              </Box>
-            ) : (
-              <TableContainer component={Paper} elevation={3}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell sx={{ color: 'text.primary', fontWeight: 'bold' }}>Rank</TableCell>
-                      <TableCell sx={{ color: 'text.primary', fontWeight: 'bold' }}>User</TableCell>
-                      <TableCell sx={{ color: 'text.primary', fontWeight: 'bold' }}>Email</TableCell>
-                      <TableCell align="right" sx={{ color: 'text.primary', fontWeight: 'bold' }}>Total Score</TableCell>
-                      <TableCell align="right" sx={{ color: 'text.primary', fontWeight: 'bold' }}>Quizzes Taken</TableCell>
-                      <TableCell align="right" sx={{ color: 'text.primary', fontWeight: 'bold' }}>Average Score</TableCell>
-                      <TableCell sx={{ color: 'text.primary', fontWeight: 'bold' }}>Last Activity</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
+        <TabPanel value={tabValue} index={0}>
+          <h2 className="text-2xl font-semibold text-blue-400 mb-4">Global Leaderboard</h2>
+          
+          {loading ? (
+            <div className="flex justify-center my-8">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+          ) : (
+            <div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="min-w-full">
+                  <thead className="bg-gray-700">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Rank</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">User</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Email</th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Total Score</th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Quizzes Taken</th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Average Score</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Last Activity</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-700">
                     {globalLeaderboard.map((user) => (
-                      <StyledTableRow key={user._id} rank={user.rank}>
-                        <TableCell>
-                          <Chip 
-                            label={`#${user.rank}`} 
-                            color={
-                              user.rank === 1 ? 'primary' : 
-                              user.rank <= 3 ? 'secondary' : 'default'
-                            }
-                          />
-                        </TableCell>
-                        <TableCell sx={{ color: 'text.primary' }}>{user.username}</TableCell>
-                        <TableCell sx={{ color: 'text.primary' }}>{user.email}</TableCell>
-                        <TableCell align="right" sx={{ color: 'text.primary' }}>{user.totalScore}</TableCell>
-                        <TableCell align="right" sx={{ color: 'text.primary' }}>{user.totalQuizzes}</TableCell>
-                        <TableCell align="right">
-                          <ScoreChip 
-                            score={user.averageScore} 
-                            label={`${user.averageScore}%`} 
-                          />
-                        </TableCell>
-                        <TableCell sx={{ color: 'text.primary' }}>{formatDate(user.lastActivity)}</TableCell>
-                      </StyledTableRow>
+                      <tr key={user._id} className={getRankColor(user.rank)}>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`${getRankBadgeColor(user.rank)} text-white px-3 py-1 rounded-full text-sm font-semibold`}>
+                            #{user.rank}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{user.username}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{user.email}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white text-right">{user.totalScore}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white text-right">{user.totalQuizzes}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
+                          <ScoreChip score={user.averageScore} label={`${user.averageScore}%`} />
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{formatDate(user.lastActivity)}</td>
+                      </tr>
                     ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            )}
-          </TabPanel>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </TabPanel>
 
-          <TabPanel value={tabValue} index={1}>
-            <Typography variant="h5" gutterBottom color="primary">
-              Quiz Leaderboard
-            </Typography>
-            
-            <Paper elevation={2} sx={{ p: 2, mb: 2 }}>
-              <FormControl fullWidth>
-                <InputLabel id="quiz-select-label" sx={{ color: 'text.primary' }}>Select Quiz</InputLabel>
-                <Select
-                  labelId="quiz-select-label"
-                  value={selectedQuiz}
-                  label="Select Quiz"
-                  onChange={(e) => setSelectedQuiz(e.target.value)}
-                  sx={{ color: 'text.primary' }}
-                >
-                  {quizzes.map((quiz) => (
-                    <MenuItem key={quiz._id} value={quiz._id}>
-                      {quiz.title}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Paper>
-            
-            {loading ? (
-              <Box display="flex" justifyContent="center" my={4}>
-                <CircularProgress />
-              </Box>
-            ) : selectedQuiz && quizLeaderboard.length > 0 ? (
-              <TableContainer component={Paper} elevation={3}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell sx={{ color: 'text.primary', fontWeight: 'bold' }}>Rank</TableCell>
-                      <TableCell sx={{ color: 'text.primary', fontWeight: 'bold' }}>User</TableCell>
-                      <TableCell align="right" sx={{ color: 'text.primary', fontWeight: 'bold' }}>Best Score</TableCell>
-                      <TableCell align="right" sx={{ color: 'text.primary', fontWeight: 'bold' }}>Attempts</TableCell>
-                      <TableCell sx={{ color: 'text.primary', fontWeight: 'bold' }}>Best Score Date</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
+        <TabPanel value={tabValue} index={1}>
+          <h2 className="text-2xl font-semibold text-blue-400 mb-4">Quiz Leaderboard</h2>
+          
+          <div className="bg-gray-800 p-4 rounded-lg shadow-md mb-6">
+            <div className="relative">
+              <select
+                value={selectedQuiz}
+                onChange={(e) => setSelectedQuiz(e.target.value)}
+                className="bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-4 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 w-full pr-8"
+              >
+                <option value="">Select Quiz</option>
+                {quizzes.map((quiz) => (
+                  <option key={quiz._id} value={quiz._id}>
+                    {quiz.title}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </div>
+            </div>
+          </div>
+          
+          {loading ? (
+            <div className="flex justify-center my-8">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+          ) : selectedQuiz && quizLeaderboard.length > 0 ? (
+            <div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="min-w-full">
+                  <thead className="bg-gray-700">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Rank</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">User</th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Best Score</th>
+                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Attempts</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Best Score Date</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-700">
                     {quizLeaderboard.map((user) => (
-                      <StyledTableRow key={user._id} rank={user.rank}>
-                        <TableCell>
-                          <Chip 
-                            label={`#${user.rank}`} 
-                            color={
-                              user.rank === 1 ? 'primary' : 
-                              user.rank <= 3 ? 'secondary' : 'default'
-                            }
-                          />
-                        </TableCell>
-                        <TableCell sx={{ color: 'text.primary' }}>{user.username}</TableCell>
-                        <TableCell align="right">
-                          <ScoreChip 
-                            score={user.bestScore} 
-                            label={`${user.bestScore}%`} 
-                          />
-                        </TableCell>
-                        <TableCell align="right" sx={{ color: 'text.primary' }}>{user.totalAttempts}</TableCell>
-                        <TableCell sx={{ color: 'text.primary' }}>{formatDate(user.bestScoreDate)}</TableCell>
-                      </StyledTableRow>
+                      <tr key={user._id} className={getRankColor(user.rank)}>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`${getRankBadgeColor(user.rank)} text-white px-3 py-1 rounded-full text-sm font-semibold`}>
+                            #{user.rank}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{user.username}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
+                          <ScoreChip score={user.bestScore} label={`${user.bestScore}%`} />
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white text-right">{user.totalAttempts}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{formatDate(user.bestScoreDate)}</td>
+                      </tr>
                     ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            ) : (
-              <Paper elevation={3} sx={{ p: 4, textAlign: 'center' }}>
-                <Typography variant="body1" color="textSecondary">
-                  {selectedQuiz ? 'No data available for this quiz' : 'Please select a quiz to view its leaderboard'}
-                </Typography>
-              </Paper>
-            )}
-          </TabPanel>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-gray-800 p-8 rounded-lg shadow-lg text-center">
+              <p className="text-gray-400">
+                {selectedQuiz ? 'No data available for this quiz' : 'Please select a quiz to view its leaderboard'}
+              </p>
+            </div>
+          )}
+        </TabPanel>
 
-          <TabPanel value={tabValue} index={2}>
-            <Typography variant="h5" gutterBottom color="primary">
-              User Statistics
-            </Typography>
-            
-            <Paper elevation={2} sx={{ p: 2, mb: 2 }}>
-              <Box sx={{ display: 'flex', gap: 2 }}>
-                <TextField
-                  label="Enter User ID"
-                  variant="outlined"
-                  value={userIdSearch}
-                  onChange={(e) => setUserIdSearch(e.target.value)}
-                  sx={{ flexGrow: 1 }}
-                  InputLabelProps={{ style: { color: 'text.primary' } }}
-                />
-                <Button 
-                  variant="contained" 
-                  onClick={() => fetchUserStats(userIdSearch)}
-                  disabled={!userIdSearch}
-                >
-                  Search
-                </Button>
-              </Box>
-            </Paper>
-            
-            {loading ? (
-              <Box display="flex" justifyContent="center" my={4}>
-                <CircularProgress />
-              </Box>
-            ) : userStats ? (
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
-                  <Card elevation={3}>
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom color="primary">
-                        Overall Statistics
-                      </Typography>
-                      <Box>
-                        <Typography variant="body2" sx={{ mb: 1, color: 'text.primary' }}>
-                          <strong>Rank:</strong> {userStats.rank ? `#${userStats.rank}` : 'N/A'}
-                        </Typography>
-                        <Typography variant="body2" sx={{ mb: 1, color: 'text.primary' }}>
-                          <strong>Total Submissions:</strong> {userStats.stats.totalSubmissions}
-                        </Typography>
-                        <Typography variant="body2" sx={{ mb: 1, color: 'text.primary' }}>
-                          <strong>Total Score:</strong> {userStats.stats.totalScore}
-                        </Typography>
-                        <Typography variant="body2" sx={{ mb: 1, color: 'text.primary' }}>
-                          <strong>Average Score:</strong>{' '}
-                          <ScoreChip 
-                            score={userStats.stats.averageScore} 
-                            label={`${userStats.stats.averageScore.toFixed(2)}%`} 
-                            size="small"
-                          />
-                        </Typography>
-                        <Typography variant="body2" sx={{ mb: 1, color: 'text.primary' }}>
-                          <strong>Best Score:</strong>{' '}
-                          <ScoreChip 
-                            score={userStats.stats.bestScore} 
-                            label={`${userStats.stats.bestScore}%`} 
-                            size="small"
-                          />
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: 'text.primary' }}>
-                          <strong>Worst Score:</strong>{' '}
-                          <ScoreChip 
-                            score={userStats.stats.worstScore} 
-                            label={`${userStats.stats.worstScore}%`} 
-                            size="small"
-                          />
-                        </Typography>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                
-                <Grid item xs={12}>
-                  <Typography variant="h6" gutterBottom sx={{ mt: 2 }} color="primary">
-                    Quiz Breakdown
-                  </Typography>
-                  <TableContainer component={Paper} elevation={3}>
-                    <Table size="small">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell sx={{ color: 'text.primary', fontWeight: 'bold' }}>Quiz Title</TableCell>
-                          <TableCell align="right" sx={{ color: 'text.primary', fontWeight: 'bold' }}>Attempts</TableCell>
-                          <TableCell align="right" sx={{ color: 'text.primary', fontWeight: 'bold' }}>Best Score</TableCell>
-                          <TableCell align="right" sx={{ color: 'text.primary', fontWeight: 'bold' }}>Average Score</TableCell>
-                          <TableCell sx={{ color: 'text.primary', fontWeight: 'bold' }}>Last Attempt</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
+        <TabPanel value={tabValue} index={2}>
+          <h2 className="text-2xl font-semibold text-blue-400 mb-4">User Statistics</h2>
+          
+          <div className="bg-gray-800 p-4 rounded-lg shadow-md mb-6">
+            <div className="flex gap-4">
+              <input
+                type="text"
+                placeholder="Enter User ID"
+                value={userIdSearch}
+                onChange={(e) => setUserIdSearch(e.target.value)}
+                className="bg-gray-700 text-white border border-gray-600 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 flex-grow"
+              />
+              <button
+                onClick={() => fetchUserStats(userIdSearch)}
+                disabled={!userIdSearch}
+                className={`py-2 px-6 rounded-lg font-medium ${!userIdSearch ? 'bg-gray-600 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
+              >
+                Search
+              </button>
+            </div>
+          </div>
+          
+          {loading ? (
+            <div className="flex justify-center my-8">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            </div>
+          ) : userStats ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+                <h3 className="text-lg font-semibold text-blue-400 mb-4">Overall Statistics</h3>
+                <div className="space-y-2">
+                  <p className="text-sm">
+                    <span className="font-semibold">Rank:</span> {userStats.rank ? `#${userStats.rank}` : 'N/A'}
+                  </p>
+                  <p className="text-sm">
+                    <span className="font-semibold">Total Submissions:</span> {userStats.stats.totalSubmissions}
+                  </p>
+                  <p className="text-sm">
+                    <span className="font-semibold">Total Score:</span> {userStats.stats.totalScore}
+                  </p>
+                  <p className="text-sm flex items-center gap-2">
+                    <span className="font-semibold">Average Score:</span>
+                    <ScoreChip 
+                      score={userStats.stats.averageScore} 
+                      label={`${userStats.stats.averageScore.toFixed(2)}%`} 
+                      size="small"
+                    />
+                  </p>
+                  <p className="text-sm flex items-center gap-2">
+                    <span className="font-semibold">Best Score:</span>
+                    <ScoreChip 
+                      score={userStats.stats.bestScore} 
+                      label={`${userStats.stats.bestScore}%`} 
+                      size="small"
+                    />
+                  </p>
+                  <p className="text-sm flex items-center gap-2">
+                    <span className="font-semibold">Worst Score:</span>
+                    <ScoreChip 
+                      score={userStats.stats.worstScore} 
+                      label={`${userStats.stats.worstScore}%`} 
+                      size="small"
+                    />
+                  </p>
+                </div>
+              </div>
+              
+              <div className="col-span-1 md:col-span-2">
+                <h3 className="text-lg font-semibold text-blue-400 mb-4 mt-6">Quiz Breakdown</h3>
+                <div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full">
+                      <thead className="bg-gray-700">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Quiz Title</th>
+                          <th className="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Attempts</th>
+                          <th className="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Best Score</th>
+                          <th className="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Average Score</th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Last Attempt</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-700">
                         {userStats.quizBreakdown.map((quiz) => (
-                          <TableRow key={quiz._id}>
-                            <TableCell sx={{ color: 'text.primary' }}>{quiz.quizTitle}</TableCell>
-                            <TableCell align="right" sx={{ color: 'text.primary' }}>{quiz.attempts}</TableCell>
-                            <TableCell align="right">
+                          <tr key={quiz._id} className="hover:bg-gray-700/50">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{quiz.quizTitle}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-white text-right">{quiz.attempts}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
                               <ScoreChip 
                                 score={quiz.bestScore} 
                                 label={`${quiz.bestScore}%`} 
                                 size="small"
                               />
-                            </TableCell>
-                            <TableCell align="right">
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
                               <ScoreChip 
                                 score={quiz.averageScore} 
                                 label={`${quiz.averageScore.toFixed(2)}%`} 
                                 size="small"
                               />
-                            </TableCell>
-                            <TableCell sx={{ color: 'text.primary' }}>{formatDate(quiz.lastAttempt)}</TableCell>
-                          </TableRow>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{formatDate(quiz.lastAttempt)}</td>
+                          </tr>
                         ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </Grid>
-              </Grid>
-            ) : (
-              <Paper elevation={3} sx={{ p: 4, textAlign: 'center' }}>
-                <Typography variant="body1" color="textSecondary">
-                  Enter a User ID to view their statistics
-                </Typography>
-              </Paper>
-            )}
-          </TabPanel>
-        </Container>
-      </Box>
-    </ThemeProvider>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="bg-gray-800 p-8 rounded-lg shadow-lg text-center">
+              <p className="text-gray-400">
+                Enter a User ID to view their statistics
+              </p>
+            </div>
+          )}
+        </TabPanel>
+      </div>
+    </div>
   );
 };
 
