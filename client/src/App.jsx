@@ -27,6 +27,7 @@ import QuestionsManagement from "./pages/AdminPAge/QuestionsManagement";
 import { HomePage, NotFoundPage } from "./pages/ExtraPage/Homepage";
 import Sidebar from "./components/Sidebar/Sidebar";
 import GlobalStyles from "./components/Sidebar/GlobalStyles";
+import UserManagement from "./pages/AdminPAge/UserManagment";
 
 const App = () => {
   return (
@@ -128,6 +129,14 @@ const App = () => {
                   element={
                     <AdminRoute>
                       <QuestionsManagement />
+                    </AdminRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin/users" 
+                  element={
+                    <AdminRoute>
+                      <UserManagement />
                     </AdminRoute>
                   } 
                 />
