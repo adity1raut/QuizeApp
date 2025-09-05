@@ -13,7 +13,7 @@ import {
   EyeOff,
   Shield,
 } from "lucide-react";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const QuizStatsPage = () => {
   const [quizStats, setQuizStats] = useState(null);

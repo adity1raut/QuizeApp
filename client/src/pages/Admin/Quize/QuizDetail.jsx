@@ -10,7 +10,7 @@ import {
   BarChart3,
   FileText,
 } from "lucide-react";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../../contexts/AuthContext";
 
 const QuizDetail = () => {
   const { quizId } = useParams();

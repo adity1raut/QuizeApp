@@ -12,24 +12,24 @@ import SignupPage from "./pages/SignUpPage/SignUpPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
-import Quiz from "./pages/UserPage/Quiz";
-import Results from "./pages/UserPage/Result";
-import Submissions from "./pages/UserPage/Submissions";
-import ActiveQuizzesPage from "./pages/UserPage/ActiveQuizzesPage";
-import SubmissionDetails from "./pages/UserPage/SubmissionDetails";
+import Quiz from "./pages/UserPage/Quize/Quiz";
+import Results from "./pages/UserPage/Other/Result";
+import Submissions from "./pages/UserPage/Submission/Submissions";
+import ActiveQuizzesPage from "./pages/UserPage/Other/ActiveQuizzesPage";
+import SubmissionDetails from "./pages/UserPage/Submission/SubmissionDetails";
 
-import QuizStatsPage from "./pages/AdminPAge/QuizStatsPage";
-import AdminDashboard from "./pages/AdminPAge/AdminMain";
-import QuizDetail from "./pages/AdminPAge/QuizDetail";
-import QuestionsManagement from "./pages/AdminPAge/QuestionsManagement";
-import AdminLeaderboard from "./pages/AdminPAge/AdminLeaderboard";
+import QuizStatsPage from "./pages/Admin/Quize/QuizStatsPage";
+import AdminDashboard from "./pages/Admin/AdminMain";
+import QuizDetail from "./pages/Admin/Quize/QuizDetail";
+import QuestionsManagement from "./pages/Admin/Quiestions/QuestionsManagement";
+import AdminLeaderboard from "./pages/Admin/Leaderboard/AdminLeaderboard";
 
 
 import { HomePage, NotFoundPage } from "./pages/ExtraPage/Homepage";
 import Sidebar from "./components/Sidebar/Sidebar";
 import GlobalStyles from "./components/Sidebar/GlobalStyles";
-import UserManagement from "./pages/AdminPAge/UserManagment";
-import UserStatsDashboard from "./pages/UserPage/UserStatsDashboard";
+import UserManagement from "./pages/Admin/UserManagment/UserManagement";
+import UserStatsDashboard from "./pages/UserPage/Dashboard/UserStatsDashboard";
 
 const App = () => {
   return (
