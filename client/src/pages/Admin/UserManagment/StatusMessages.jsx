@@ -1,5 +1,5 @@
-import React from 'react';
-import { AlertCircle, CheckCircle } from 'lucide-react';
+import React from "react";
+import { AlertCircle, CheckCircle } from "lucide-react";
 
 const StatusMessages = ({ error, success, setError, setSuccess }) => {
   return (

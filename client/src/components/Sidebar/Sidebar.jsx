@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { 
-  Menu, X, Home, MessageSquare, User, LogOut, LogIn, UserPlus, 
-  Shield, BarChart3, FileText, ClipboardList, Brain
+import {
+  Menu,
+  X,
+  Home,
+  MessageSquare,
+  User,
+  LogOut,
+  LogIn,
+  UserPlus,
+  Shield,
+  BarChart3,
+  FileText,
+  ClipboardList,
+  Brain,
 } from "lucide-react";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../../contexts/AuthContext";
 
 const Sidebar = () => {
@@ -13,15 +24,15 @@ const Sidebar = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const location = useLocation();
   const navigate = useNavigate();
-  const { 
-    logout, 
-    adminLogout, 
-    isAuthenticated, 
-    loading, 
-    userType, 
-    isAdmin, 
+  const {
+    logout,
+    adminLogout,
+    isAuthenticated,
+    loading,
+    userType,
+    isAdmin,
     isUser,
-    user 
+    user,
   } = useAuth();
 
   const isActive = (path) => location.pathname === path;
@@ -49,8 +60,8 @@ const Sidebar = () => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024);
     };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const getNavLinks = () => {
@@ -58,7 +69,7 @@ const Sidebar = () => {
       return [
         { to: "/", icon: Home, label: "Home" },
         { to: "/login", icon: LogIn, label: "Login" },
-        { to: "/signup", icon: UserPlus, label: "Sign Up" }
+        { to: "/signup", icon: UserPlus, label: "Sign Up" },
       ];
     }
 
@@ -67,7 +78,7 @@ const Sidebar = () => {
         { to: "/admin/dashboard", icon: BarChart3, label: "Dashboard" },
         { to: "/admin/users", icon: User, label: "User Management" },
         { to: "/admin/leaderboard", icon: BarChart3, label: "Leaderboard" },
-        { to: "/profile", icon: User, label: "Profile" }
+        { to: "/profile", icon: User, label: "Profile" },
       ];
     }
 
@@ -77,7 +88,7 @@ const Sidebar = () => {
         { to: "/quiz", icon: Brain, label: "Quizzes" },
         { to: "/submissions", icon: ClipboardList, label: "My Submissions" },
         { to: "/dhashboard", icon: BarChart3, label: "Dhashboard" },
-        { to: "/profile", icon: User, label: "Profile" }
+        { to: "/profile", icon: User, label: "Profile" },
       ];
     }
 
@@ -128,7 +139,7 @@ const Sidebar = () => {
           {getBrandName()}
         </span>
       </div>
-      
+
       <div className="h-16 lg:hidden"></div>
 
       {/* Sidebar */}
@@ -140,7 +151,10 @@ const Sidebar = () => {
       >
         {/* Desktop Header */}
         <div className="p-6 border-b border-gray-700 hidden lg:block">
-          <Link to="/" className="text-white text-2xl font-bold flex items-center">
+          <Link
+            to="/"
+            className="text-white text-2xl font-bold flex items-center"
+          >
             <BrandIcon className="mr-2 h-7 w-7 text-blue-400" />
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
               {getBrandName()}
@@ -148,23 +162,28 @@ const Sidebar = () => {
           </Link>
         </div>
 
-        <div className="p-4 space-y-1 overflow-y-auto" style={{ maxHeight: "calc(100% - 160px)" }}>
+        <div
+          className="p-4 space-y-1 overflow-y-auto"
+          style={{ maxHeight: "calc(100% - 160px)" }}
+        >
           {navLinks.map(({ to, icon: Icon, label }) => (
             <Link
               key={to}
               to={to}
               className={`flex items-center p-3 text-gray-300 hover:bg-gray-750 hover:text-white rounded-lg transition-all duration-200 group ${
-                isActive(to) 
-                  ? "bg-gradient-to-r from-blue-900/40 to-blue-800/30 text-white border-l-4 border-blue-500" 
+                isActive(to)
+                  ? "bg-gradient-to-r from-blue-900/40 to-blue-800/30 text-white border-l-4 border-blue-500"
                   : "hover:border-l-4 hover:border-gray-600"
               }`}
               onClick={handleNavigation}
             >
-              <Icon 
-                size={18} 
+              <Icon
+                size={18}
                 className={`mr-3 transition-colors ${
-                  isActive(to) ? "text-blue-400" : "text-gray-400 group-hover:text-white"
-                }`} 
+                  isActive(to)
+                    ? "text-blue-400"
+                    : "text-gray-400 group-hover:text-white"
+                }`}
               />
               <span className="font-medium">{label}</span>
             </Link>
@@ -185,7 +204,10 @@ const Sidebar = () => {
               className="w-full flex items-center p-3 text-gray-300 hover:bg-red-900/40 hover:text-white rounded-lg transition-all duration-200 group"
               onClick={handleLogout}
             >
-              <LogOut size={18} className="mr-3 text-gray-400 group-hover:text-white" />
+              <LogOut
+                size={18}
+                className="mr-3 text-gray-400 group-hover:text-white"
+              />
               <span className="font-medium">Logout</span>
             </button>
           </div>

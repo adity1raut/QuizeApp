@@ -28,7 +28,7 @@ const Quiz = () => {
     try {
       const response = await axios.get(`/api/quiz/${id}/start`);
       setQuiz(response.data.quiz);
-      
+
       // If quiz has a time limit, set up timer
       if (response.data.quiz.timeLimit) {
         setTimeRemaining(response.data.quiz.timeLimit * 60); // Convert minutes to seconds
@@ -44,9 +44,9 @@ const Quiz = () => {
   // Timer effect for quizzes with time limits
   useEffect(() => {
     if (timeRemaining === null || timeRemaining <= 0) return;
-    
+
     const timer = setInterval(() => {
-      setTimeRemaining(prev => {
+      setTimeRemaining((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
           // Auto-submit when time runs out
@@ -58,7 +58,7 @@ const Quiz = () => {
         return prev - 1;
       });
     }, 1000);
-    
+
     return () => clearInterval(timer);
   }, [timeRemaining, answers]);
 
@@ -121,7 +121,12 @@ const Quiz = () => {
   }
 
   if (error || !quiz) {
-    return <ErrorMessage error={error || "Quiz not found"} onReturnHome={() => navigate("/")} />;
+    return (
+      <ErrorMessage
+        error={error || "Quiz not found"}
+        onReturnHome={() => navigate("/")}
+      />
+    );
   }
 
   const question = quiz.questions[currentQuestion];
@@ -130,27 +135,27 @@ const Quiz = () => {
   return (
     <div className="min-h-screen bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        <QuizHeader 
-          quiz={quiz} 
-          timeRemaining={timeRemaining} 
-          onBack={() => navigate(-1)} 
+        <QuizHeader
+          quiz={quiz}
+          timeRemaining={timeRemaining}
+          onBack={() => navigate(-1)}
         />
-        
-        <QuizProgress 
+
+        <QuizProgress
           currentQuestion={currentQuestion}
           totalQuestions={quiz.questions.length}
           answers={answers}
           onQuestionNav={handleQuestionNav}
         />
 
-        <QuestionCard 
+        <QuestionCard
           question={question}
           questionNumber={currentQuestion + 1}
           selectedAnswer={answers[question._id]}
           onAnswerSelect={handleAnswerSelect}
         />
 
-        <QuizNavigation 
+        <QuizNavigation
           currentQuestion={currentQuestion}
           totalQuestions={quiz.questions.length}
           onPrevious={handlePrevious}
@@ -160,7 +165,7 @@ const Quiz = () => {
           answeredCount={answeredCount}
         />
 
-        <AnswerStatus 
+        <AnswerStatus
           answeredCount={answeredCount}
           totalQuestions={quiz.questions.length}
         />

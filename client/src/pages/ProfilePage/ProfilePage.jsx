@@ -20,7 +20,7 @@ import {
   Crown,
   Award,
   Star,
-  Settings
+  Settings,
 } from "lucide-react";
 
 const ProfilePage = () => {
@@ -163,10 +163,13 @@ const ProfilePage = () => {
 
   // Get user role icon
   const getRoleIcon = () => {
-    switch(user.role) {
-      case 'admin': return <Crown className="h-5 w-5 text-yellow-400" />;
-      case 'premium': return <Star className="h-5 w-5 text-yellow-300" />;
-      default: return <User className="h-5 w-5 text-purple-400" />;
+    switch (user.role) {
+      case "admin":
+        return <Crown className="h-5 w-5 text-yellow-400" />;
+      case "premium":
+        return <Star className="h-5 w-5 text-yellow-300" />;
+      default:
+        return <User className="h-5 w-5 text-purple-400" />;
     }
   };
 
@@ -178,7 +181,7 @@ const ProfilePage = () => {
         <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-8 border-b border-gray-700 relative overflow-hidden">
           <div className="absolute -top-16 -right-16 w-40 h-40 bg-purple-600/10 rounded-full"></div>
           <div className="absolute -bottom-16 -left-16 w-40 h-40 bg-indigo-600/10 rounded-full"></div>
-          
+
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center relative z-10">
             <div>
               <h1 className="text-3xl font-bold text-white flex items-center">
@@ -222,7 +225,9 @@ const ProfilePage = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-400">Username</p>
-                <p className="font-medium text-white text-lg">{user.username}</p>
+                <p className="font-medium text-white text-lg">
+                  {user.username}
+                </p>
               </div>
             </div>
 
@@ -242,7 +247,9 @@ const ProfilePage = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-400">Role</p>
-                <p className="font-medium text-white text-lg capitalize">{user.role}</p>
+                <p className="font-medium text-white text-lg capitalize">
+                  {user.role}
+                </p>
               </div>
             </div>
 
@@ -253,10 +260,10 @@ const ProfilePage = () => {
               <div>
                 <p className="text-sm text-gray-400">Member Since</p>
                 <p className="font-medium text-white text-lg">
-                  {new Date(user.createdAt).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
+                  {new Date(user.createdAt).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
                   })}
                 </p>
               </div>
@@ -390,7 +397,8 @@ const ProfilePage = () => {
             Danger Zone
           </h2>
           <p className="text-gray-400 mb-6">
-            Once you delete your account, there is no going back. Please be certain.
+            Once you delete your account, there is no going back. Please be
+            certain.
           </p>
 
           <button

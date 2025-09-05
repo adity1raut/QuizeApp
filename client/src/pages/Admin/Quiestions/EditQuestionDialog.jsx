@@ -30,14 +30,10 @@ const EditQuestionDialog = ({ question, onClose, onSuccess, setError }) => {
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
       <div className="bg-gray-800 rounded-xl w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto">
-        <h2 className="text-xl font-semibold mb-4 text-white">
-          Edit Question
-        </h2>
+        <h2 className="text-xl font-semibold mb-4 text-white">Edit Question</h2>
 
         <div className="mb-4">
-          <label className="block text-gray-300 mb-2">
-            Question Text
-          </label>
+          <label className="block text-gray-300 mb-2">Question Text</label>
           <input
             type="text"
             className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -78,9 +74,7 @@ const EditQuestionDialog = ({ question, onClose, onSuccess, setError }) => {
         </div>
 
         <div className="mb-6">
-          <label className="block text-gray-300 mb-2">
-            Correct Answer
-          </label>
+          <label className="block text-gray-300 mb-2">Correct Answer</label>
           <select
             className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
             value={currentQuestion?.correctAnswer || ""}

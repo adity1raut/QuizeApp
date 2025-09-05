@@ -13,10 +13,9 @@ const EmptyState = ({ searchTerm, onClearSearch }) => {
         {searchTerm ? "No matching quizzes found" : "No Quizzes Available"}
       </h3>
       <p className="text-gray-500 max-w-md mx-auto">
-        {searchTerm 
+        {searchTerm
           ? "Try adjusting your search terms or filters."
-          : "There are no active quizzes at the moment. Please check back later."
-        }
+          : "There are no active quizzes at the moment. Please check back later."}
       </p>
       {searchTerm && (
         <button

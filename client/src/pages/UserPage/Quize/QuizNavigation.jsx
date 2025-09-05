@@ -8,7 +8,7 @@ const QuizNavigation = ({
   onNext,
   onSubmit,
   submitting,
-  answeredCount
+  answeredCount,
 }) => {
   return (
     <div className="flex justify-between mb-8">
@@ -36,10 +36,7 @@ const QuizNavigation = ({
       ) : (
         <button
           onClick={onSubmit}
-          disabled={
-            submitting ||
-            answeredCount < totalQuestions
-          }
+          disabled={submitting || answeredCount < totalQuestions}
           className={`flex items-center px-5 py-3 rounded-lg font-medium transition-all ${
             submitting || answeredCount < totalQuestions
               ? "bg-gray-800 text-gray-500 cursor-not-allowed"

@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Users, BarChart3, Loader2 } from 'lucide-react';
+import { Users, BarChart3, Loader2 } from "lucide-react";
 import { useAuth } from "../../../contexts/AuthContext";
-import UserTable from './UserTable';
-import UserFilters from './UserFilters';
-import StatusMessages from './StatusMessages';
-import Pagination from './Pagination';
+import UserTable from "./UserTable";
+import UserFilters from "./UserFilters";
+import StatusMessages from "./StatusMessages";
+import Pagination from "./Pagination";
 
 const UserManagement = () => {
   const navigate = useNavigate();
@@ -17,10 +17,10 @@ const UserManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalUsers, setTotalUsers] = useState(0);
-  const [search, setSearch] = useState('');
-  const [roleFilter, setRoleFilter] = useState('');
-  const [sortBy, setSortBy] = useState('createdAt');
-  const [sortOrder, setSortOrder] = useState('desc');
+  const [search, setSearch] = useState("");
+  const [roleFilter, setRoleFilter] = useState("");
+  const [sortBy, setSortBy] = useState("createdAt");
+  const [sortOrder, setSortOrder] = useState("desc");
   const [updating, setUpdating] = useState(null);
   const [deleting, setDeleting] = useState(null);
 
@@ -39,35 +39,39 @@ const UserManagement = () => {
     try {
       setLoading(true);
       setError("");
-      
+
       const params = new URLSearchParams({
         page: currentPage.toString(),
-        limit: '10',
+        limit: "10",
         sortBy,
         sortOrder,
         ...(search && { search }),
-        ...(roleFilter && { role: roleFilter })
+        ...(roleFilter && { role: roleFilter }),
       });
-      
+
       const response = await axios.get(`/api/admin/users?${params}`, {
         withCredentials: true,
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json'
-        }
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
       });
-      
+
       const data = response.data.data || response.data;
       setUsers(data.users || []);
       setTotalPages(data.totalPages || 1);
       setTotalUsers(data.totalUsers || data.total || 0);
     } catch (err) {
-      console.error('Fetch users error:', err);
+      console.error("Fetch users error:", err);
       if (err.response?.status === 401) {
         logout();
         navigate("/login");
       } else {
-        setError(err.response?.data?.error || err.response?.data?.message || "Failed to fetch users");
+        setError(
+          err.response?.data?.error ||
+            err.response?.data?.message ||
+            "Failed to fetch users",
+        );
       }
     } finally {
       setLoading(false);
@@ -89,7 +93,7 @@ const UserManagement = () => {
 
   const handleRoleUpdate = async (userId, newRole) => {
     // Prevent self-demotion
-    if (user?.id === userId && newRole !== 'Admin') {
+    if (user?.id === userId && newRole !== "Admin") {
       setError("You cannot change your own admin role");
       return;
     }
@@ -98,36 +102,41 @@ const UserManagement = () => {
       setUpdating(userId);
       setError("");
       setSuccess("");
-      
-      const response = await axios.put(`/api/admin/users/${userId}/role`, 
+
+      const response = await axios.put(
+        `/api/admin/users/${userId}/role`,
         { role: newRole },
-        { 
+        {
           withCredentials: true,
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json'
-          }
-        }
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        },
       );
-      
+
       setSuccess(`User role updated to ${newRole} successfully!`);
-      
+
       // Update the user in the current list instead of refetching
-      setUsers(prevUsers => 
-        prevUsers.map(user => 
-          user._id === userId ? { ...user, role: newRole } : user
-        )
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user._id === userId ? { ...user, role: newRole } : user,
+        ),
       );
-      
+
       // Clear success message after 3 seconds
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
-      console.error('Role update error:', err);
+      console.error("Role update error:", err);
       if (err.response?.status === 401) {
         logout();
         navigate("/login");
       } else {
-        setError(err.response?.data?.error || err.response?.data?.message || "Failed to update user role");
+        setError(
+          err.response?.data?.error ||
+            err.response?.data?.message ||
+            "Failed to update user role",
+        );
       }
     } finally {
       setUpdating(null);
@@ -141,34 +150,44 @@ const UserManagement = () => {
       return;
     }
 
-    if (window.confirm(`Are you sure you want to delete user "${username}"? This action cannot be undone.`)) {
+    if (
+      window.confirm(
+        `Are you sure you want to delete user "${username}"? This action cannot be undone.`,
+      )
+    ) {
       try {
         setDeleting(userId);
         setError("");
         setSuccess("");
-        
+
         await axios.delete(`/api/admin/users/${userId}`, {
           withCredentials: true,
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          }
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
-        
+
         setSuccess(`User "${username}" deleted successfully!`);
-        
+
         // Remove user from the current list
-        setUsers(prevUsers => prevUsers.filter(user => user._id !== userId));
-        setTotalUsers(prev => prev - 1);
-        
+        setUsers((prevUsers) =>
+          prevUsers.filter((user) => user._id !== userId),
+        );
+        setTotalUsers((prev) => prev - 1);
+
         // Clear success message after 3 seconds
         setTimeout(() => setSuccess(""), 3000);
       } catch (err) {
-        console.error('Delete user error:', err);
+        console.error("Delete user error:", err);
         if (err.response?.status === 401) {
           logout();
           navigate("/login");
         } else {
-          setError(err.response?.data?.error || err.response?.data?.message || "Failed to delete user");
+          setError(
+            err.response?.data?.error ||
+              err.response?.data?.message ||
+              "Failed to delete user",
+          );
         }
       } finally {
         setDeleting(null);
@@ -178,10 +197,10 @@ const UserManagement = () => {
 
   const handleSort = (field) => {
     if (sortBy === field) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     } else {
       setSortBy(field);
-      setSortOrder('asc');
+      setSortOrder("asc");
     }
   };
 
@@ -199,17 +218,20 @@ const UserManagement = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
-        <StatusMessages error={error} success={success} setError={setError} setSuccess={setSuccess} />
-        
+        <StatusMessages
+          error={error}
+          success={success}
+          setError={setError}
+          setSuccess={setSuccess}
+        />
+
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-3xl font-bold text-white flex items-center">
               <Users className="h-8 w-8 mr-3 text-purple-400" />
               User Management
             </h1>
-            <p className="text-gray-400 mt-1">
-              Total Users: {totalUsers}
-            </p>
+            <p className="text-gray-400 mt-1">Total Users: {totalUsers}</p>
           </div>
           <button
             onClick={() => navigate("/admin/analytics")}
@@ -220,7 +242,7 @@ const UserManagement = () => {
           </button>
         </div>
 
-        <UserFilters 
+        <UserFilters
           search={search}
           setSearch={setSearch}
           roleFilter={roleFilter}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const StatCard = ({ icon: Icon, title, value, subtitle, color = "blue" }) => {
   const colorClasses = {
@@ -6,7 +6,7 @@ const StatCard = ({ icon: Icon, title, value, subtitle, color = "blue" }) => {
     green: "bg-green-900/20 text-green-300 border-green-700/30",
     purple: "bg-purple-900/20 text-purple-300 border-purple-700/30",
     orange: "bg-orange-900/20 text-orange-300 border-orange-700/30",
-    red: "bg-red-900/20 text-red-300 border-red-700/30"
+    red: "bg-red-900/20 text-red-300 border-red-700/30",
   };
 
   return (

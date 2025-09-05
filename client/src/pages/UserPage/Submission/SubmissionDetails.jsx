@@ -15,7 +15,7 @@ import {
   Clock,
   User,
   FileText,
-  Activity
+  Activity,
 } from "lucide-react";
 
 const SubmissionDetails = () => {
@@ -58,8 +58,12 @@ const SubmissionDetails = () => {
           <div className="text-red-400 mb-4">
             <Activity size={48} className="mx-auto" />
           </div>
-          <h3 className="text-lg font-semibold text-white mb-2">Error Loading Submission</h3>
-          <p className="text-gray-400 mb-4">{error || "Submission not found"}</p>
+          <h3 className="text-lg font-semibold text-white mb-2">
+            Error Loading Submission
+          </h3>
+          <p className="text-gray-400 mb-4">
+            {error || "Submission not found"}
+          </p>
           <Link
             to="/submissions"
             className="inline-flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
@@ -106,7 +110,6 @@ const SubmissionDetails = () => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          
           <h1 className="text-3xl font-bold text-white flex items-center">
             <FileText className="h-8 w-8 mr-3 text-blue-400" />
             Submission Details
@@ -126,7 +129,8 @@ const SubmissionDetails = () => {
               <div className="flex items-center text-gray-400 mt-3">
                 <Calendar size={16} className="mr-2 text-gray-500" />
                 <span>
-                  Submitted on {new Date(submission.submittedAt).toLocaleString()}
+                  Submitted on{" "}
+                  {new Date(submission.submittedAt).toLocaleString()}
                 </span>
               </div>
             </div>
@@ -143,7 +147,8 @@ const SubmissionDetails = () => {
                   {submission.score}%
                 </div>
                 <div className="text-gray-400 text-sm mt-1">
-                  {submission.correctAnswers} of {submission.totalQuestions} correct
+                  {submission.correctAnswers} of {submission.totalQuestions}{" "}
+                  correct
                 </div>
               </div>
             </div>
@@ -200,7 +205,9 @@ const SubmissionDetails = () => {
           <div className="px-6 py-4 border-b border-gray-700 mb-6">
             <div className="flex items-center">
               <Clock className="text-gray-400 mr-3" size={24} />
-              <h2 className="text-xl font-semibold text-white">Question Breakdown</h2>
+              <h2 className="text-xl font-semibold text-white">
+                Question Breakdown
+              </h2>
             </div>
           </div>
 
@@ -222,7 +229,8 @@ const SubmissionDetails = () => {
                     <span
                       className={`font-medium ${result.isCorrect ? "text-green-400" : "text-red-400"}`}
                     >
-                      Question {index + 1}: {result.isCorrect ? "Correct" : "Incorrect"}
+                      Question {index + 1}:{" "}
+                      {result.isCorrect ? "Correct" : "Incorrect"}
                     </span>
                   </div>
                 </div>

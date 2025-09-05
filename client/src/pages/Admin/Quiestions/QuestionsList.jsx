@@ -3,7 +3,13 @@ import { Edit3, Trash2 } from "lucide-react";
 import axios from "axios";
 import { useAuth } from "../../../contexts/AuthContext";
 
-const QuestionsList = ({ questions, quizId, onEditQuestion, onDeleteQuestion, setError }) => {
+const QuestionsList = ({
+  questions,
+  quizId,
+  onEditQuestion,
+  onDeleteQuestion,
+  setError,
+}) => {
   const { logout, navigate } = useAuth();
 
   const handleDeleteQuestion = async (questionId) => {
@@ -39,10 +45,7 @@ const QuestionsList = ({ questions, quizId, onEditQuestion, onDeleteQuestion, se
       ) : (
         <div className="space-y-4">
           {questions.map((question, index) => (
-            <div
-              key={question._id}
-              className="bg-gray-700/50 rounded-lg p-4"
-            >
+            <div key={question._id} className="bg-gray-700/50 rounded-lg p-4">
               <div className="flex justify-between items-start">
                 <div className="flex-1">
                   <h3 className="font-medium text-white">

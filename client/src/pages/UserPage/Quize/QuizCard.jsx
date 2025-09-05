@@ -1,6 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { User, Calendar, BookOpen, Clock, ArrowRight, Star } from "lucide-react";
+import {
+  User,
+  Calendar,
+  BookOpen,
+  Clock,
+  ArrowRight,
+  Star,
+} from "lucide-react";
 
 const QuizCard = ({ quiz }) => {
   return (
@@ -29,9 +36,7 @@ const QuizCard = ({ quiz }) => {
             </div>
             <div className="flex items-center">
               <Calendar className="h-3.5 w-3.5 mr-1.5" />
-              <span>
-                {new Date(quiz.createdAt).toLocaleDateString()}
-              </span>
+              <span>{new Date(quiz.createdAt).toLocaleDateString()}</span>
             </div>
           </div>
         </div>
@@ -40,7 +45,8 @@ const QuizCard = ({ quiz }) => {
           <div className="flex items-center text-sm text-gray-400">
             <BookOpen className="h-4 w-4 mr-1.5" />
             <span>
-              {quiz.questions.length} {quiz.questions.length === 1 ? "Question" : "Questions"}
+              {quiz.questions.length}{" "}
+              {quiz.questions.length === 1 ? "Question" : "Questions"}
             </span>
           </div>
           {quiz.timeLimit && (

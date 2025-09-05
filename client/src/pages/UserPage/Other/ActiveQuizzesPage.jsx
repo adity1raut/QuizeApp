@@ -11,10 +11,10 @@ import {
   ChevronRight,
   LogIn,
   Trophy,
-  Activity
+  Activity,
 } from "lucide-react";
 import { useAuth } from "../../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 
 const ActiveQuizzesPage = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -135,8 +135,12 @@ const ActiveQuizzesPage = () => {
           <div className="text-red-400 mb-4">
             <Activity size={48} className="mx-auto" />
           </div>
-          <h3 className="text-lg font-semibold text-white mb-2">Authentication Required</h3>
-          <p className="text-gray-400 mb-4">Please log in to view active quizzes</p>
+          <h3 className="text-lg font-semibold text-white mb-2">
+            Authentication Required
+          </h3>
+          <p className="text-gray-400 mb-4">
+            Please log in to view active quizzes
+          </p>
           <button
             onClick={() => (window.location.href = "/login")}
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
@@ -167,7 +171,9 @@ const ActiveQuizzesPage = () => {
           <div className="text-red-400 mb-4">
             <Activity size={48} className="mx-auto" />
           </div>
-          <h3 className="text-lg font-semibold text-white mb-2">Error Loading Quizzes</h3>
+          <h3 className="text-lg font-semibold text-white mb-2">
+            Error Loading Quizzes
+          </h3>
           <p className="text-gray-400 mb-4">{error}</p>
           <button
             onClick={fetchActiveQuizzes}
@@ -190,7 +196,8 @@ const ActiveQuizzesPage = () => {
             Active Quizzes
           </h1>
           <p className="text-gray-400 mt-2">
-            {quizzes.length} active quiz{quizzes.length !== 1 ? "zes" : ""} available
+            {quizzes.length} active quiz{quizzes.length !== 1 ? "zes" : ""}{" "}
+            available
           </p>
         </div>
 
@@ -251,14 +258,20 @@ const ActiveQuizzesPage = () => {
             {searchTerm ? (
               <>
                 <Search className="h-16 w-16 text-gray-500 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-white mb-2">No matching quizzes found</h3>
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  No matching quizzes found
+                </h3>
                 <p className="text-gray-400">Try adjusting your search terms</p>
               </>
             ) : (
               <>
                 <BookOpen className="h-16 w-16 text-gray-500 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-white mb-2">No active quizzes available</h3>
-                <p className="text-gray-400">Check back later for new quizzes</p>
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  No active quizzes available
+                </h3>
+                <p className="text-gray-400">
+                  Check back later for new quizzes
+                </p>
               </>
             )}
           </div>
@@ -315,7 +328,8 @@ const ActiveQuizzesPage = () => {
         {/* Results Count */}
         {filteredAndSortedQuizzes.length > 0 && searchTerm && (
           <div className="mt-6 text-center text-gray-400">
-            Showing {filteredAndSortedQuizzes.length} of {quizzes.length} quizzes
+            Showing {filteredAndSortedQuizzes.length} of {quizzes.length}{" "}
+            quizzes
             {searchTerm && ` matching "${searchTerm}"`}
           </div>
         )}

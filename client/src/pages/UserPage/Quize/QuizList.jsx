@@ -31,14 +31,16 @@ const QuizList = () => {
   };
 
   // Filter quizzes based on search term and filter
-  const filteredQuizzes = quizzes.filter(quiz => {
-    const matchesSearch = quiz.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                         quiz.description.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesFilter = filter === "all" || 
-                         (filter === "premium" && quiz.isPremium) || 
-                         (filter === "free" && !quiz.isPremium);
-    
+  const filteredQuizzes = quizzes.filter((quiz) => {
+    const matchesSearch =
+      quiz.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      quiz.description.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesFilter =
+      filter === "all" ||
+      (filter === "premium" && quiz.isPremium) ||
+      (filter === "free" && !quiz.isPremium);
+
     return matchesSearch && matchesFilter;
   });
 
@@ -54,8 +56,8 @@ const QuizList = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 py-8 px-4">
       <div className="max-w-7xl mx-auto">
         <QuizListHeader />
-        
-        <SearchFilterSection 
+
+        <SearchFilterSection
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
           filter={filter}
@@ -63,7 +65,7 @@ const QuizList = () => {
         />
 
         {filteredQuizzes.length === 0 ? (
-          <EmptyState 
+          <EmptyState
             searchTerm={searchTerm}
             onClearSearch={() => {
               setSearchTerm("");
@@ -71,10 +73,7 @@ const QuizList = () => {
             }}
           />
         ) : (
-          <QuizGrid 
-            quizzes={filteredQuizzes}
-            filter={filter}
-          />
+          <QuizGrid quizzes={filteredQuizzes} filter={filter} />
         )}
       </div>
     </div>

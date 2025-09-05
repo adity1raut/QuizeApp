@@ -1,7 +1,12 @@
 import React from "react";
 import { CheckCircle, Circle } from "lucide-react";
 
-const QuestionCard = ({ question, questionNumber, selectedAnswer, onAnswerSelect }) => {
+const QuestionCard = ({
+  question,
+  questionNumber,
+  selectedAnswer,
+  onAnswerSelect,
+}) => {
   return (
     <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 mb-8 shadow-sm">
       <div className="flex items-start mb-6">

@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import {
   ProtectedRoute,
@@ -24,7 +29,6 @@ import QuizDetail from "./pages/Admin/Quize/QuizDetail";
 import QuestionsManagement from "./pages/Admin/Quiestions/QuestionsManagement";
 import AdminLeaderboard from "./pages/Admin/Leaderboard/AdminLeaderboard";
 
-
 import { HomePage, NotFoundPage } from "./pages/ExtraPage/Homepage";
 import Sidebar from "./components/Sidebar/Sidebar";
 import GlobalStyles from "./components/Sidebar/GlobalStyles";
@@ -38,133 +42,133 @@ const App = () => {
         <GlobalStyles />
         <div className="flex min-h-screen bg-gray-100">
           <Sidebar />
-        
+
           <main className="flex-1 transition-all duration-300">
             <div className="min-h-screen">
               <Routes>
                 {/* Public Routes */}
                 <Route path="/" element={<HomePage />} />
-                
+
                 {/* Auth Routes - Public Only */}
                 <Route path="/signup" element={<SignupPage />} />
                 <Route path="/login" element={<LoginPage />} />
-                
+
                 {/* Protected Routes - All Authenticated Users */}
-                <Route 
-                  path="/profile" 
+                <Route
+                  path="/profile"
                   element={
                     <ProtectedRoute>
                       <ProfilePage />
                     </ProtectedRoute>
-                  } 
+                  }
                 />
-                <Route 
-                  path="/dhashboard" 
+                <Route
+                  path="/dhashboard"
                   element={
                     <ProtectedRoute>
                       <UserStatsDashboard />
                     </ProtectedRoute>
-                  } 
+                  }
                 />
-                
+
                 {/* User Protected Routes */}
-                <Route 
-                  path="/quiz" 
+                <Route
+                  path="/quiz"
                   element={
                     <ProtectedRoute>
                       <ActiveQuizzesPage />
                     </ProtectedRoute>
-                  } 
+                  }
                 />
-                <Route 
-                  path="/quiz/:id" 
+                <Route
+                  path="/quiz/:id"
                   element={
                     <ProtectedRoute>
                       <Quiz />
                     </ProtectedRoute>
-                  } 
+                  }
                 />
-                <Route 
-                  path="/results/:id" 
+                <Route
+                  path="/results/:id"
                   element={
                     <ProtectedRoute>
                       <Results />
                     </ProtectedRoute>
-                  } 
+                  }
                 />
-                <Route 
-                  path="/submissions" 
+                <Route
+                  path="/submissions"
                   element={
                     <ProtectedRoute>
                       <Submissions />
                     </ProtectedRoute>
-                  } 
+                  }
                 />
-                <Route 
-                  path="/submission/:id" 
+                <Route
+                  path="/submission/:id"
                   element={
                     <ProtectedRoute>
                       <SubmissionDetails />
                     </ProtectedRoute>
-                  } 
+                  }
                 />
-                
+
                 {/* Admin Protected Routes */}
-                <Route 
-                  path="/admin/dashboard" 
+                <Route
+                  path="/admin/dashboard"
                   element={
                     <AdminRoute>
                       <AdminDashboard />
                     </AdminRoute>
-                  } 
+                  }
                 />
-                <Route 
-                  path="/admin/quiz/:quizId" 
+                <Route
+                  path="/admin/quiz/:quizId"
                   element={
                     <AdminRoute>
                       <QuizDetail />
                     </AdminRoute>
-                  } 
+                  }
                 />
-                <Route 
-                  path="/admin/quiz/:quizId/stats" 
+                <Route
+                  path="/admin/quiz/:quizId/stats"
                   element={
                     <AdminRoute>
                       <QuizStatsPage />
                     </AdminRoute>
-                  } 
+                  }
                 />
-                <Route 
-                  path="/admin/quiz/:quizId/questions" 
+                <Route
+                  path="/admin/quiz/:quizId/questions"
                   element={
                     <AdminRoute>
                       <QuestionsManagement />
                     </AdminRoute>
-                  } 
+                  }
                 />
-                <Route 
-                  path="/admin/users" 
+                <Route
+                  path="/admin/users"
                   element={
                     <AdminRoute>
                       <UserManagement />
                     </AdminRoute>
-                  } 
+                  }
                 />
-                <Route 
-                  path="/admin/leaderboard" 
+                <Route
+                  path="/admin/leaderboard"
                   element={
                     <AdminRoute>
-                      <AdminLeaderboard/>
+                      <AdminLeaderboard />
                     </AdminRoute>
-                  } 
+                  }
                 />
-                
+
                 {/* Role Based Redirect */}
                 <Route path="/dashboard" element={<RoleBasedRedirect />} />
-                
+
                 {/* Utility Routes */}
                 <Route path="/unauthorized" element={<UnauthorizedPage />} />
-                
+
                 {/* Fallback Routes */}
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>

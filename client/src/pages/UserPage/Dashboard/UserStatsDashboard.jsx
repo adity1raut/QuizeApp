@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../../contexts/AuthContext'; 
-import { User, Activity } from 'lucide-react';
-import StatCard from './StatCard';
-import StatsHeader from './StatsHeader';
-import QuizBreakdownTable from './QuizBreakdownTable';
-import LoadingSpinner from './LoadingSpinner';
-import ErrorMessage from './ErrorMessage';
-import EmptyState from './EmptyState';
+import React, { useState, useEffect } from "react";
+import { useAuth } from "../../../contexts/AuthContext";
+import { User, Activity } from "lucide-react";
+import StatCard from "./StatCard";
+import StatsHeader from "./StatsHeader";
+import QuizBreakdownTable from "./QuizBreakdownTable";
+import LoadingSpinner from "./LoadingSpinner";
+import ErrorMessage from "./ErrorMessage";
+import EmptyState from "./EmptyState";
 
 const UserStatsDashboard = ({ userId = null }) => {
   const { user, isAuthenticated } = useAuth();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   // Determine which user's stats to fetch
   const targetUserId = userId || user?.id;
   const isOwnStats = !userId || userId === user?.id;
@@ -28,26 +28,26 @@ const UserStatsDashboard = ({ userId = null }) => {
     try {
       setLoading(true);
       setError(null);
-      
-      const endpoint = userId ? `/api/stats/${userId}` : '/api/stats';
+
+      const endpoint = userId ? `/api/stats/${userId}` : "/api/stats";
       const response = await fetch(endpoint, {
-        method: 'GET',
-        credentials: 'include',
+        method: "GET",
+        credentials: "include",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
-      
+
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to fetch statistics');
+        throw new Error(errorData.message || "Failed to fetch statistics");
       }
-      
+
       const data = await response.json();
       setStats(data);
     } catch (err) {
-      setError(err.message || 'Failed to fetch user statistics');
-      console.error('Stats fetch error:', err);
+      setError(err.message || "Failed to fetch user statistics");
+      console.error("Stats fetch error:", err);
     } finally {
       setLoading(false);
     }
@@ -71,7 +71,7 @@ const UserStatsDashboard = ({ userId = null }) => {
     <div className="min-h-screen bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <StatsHeader isOwnStats={isOwnStats} />
-        
+
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
           <StatCard
@@ -89,7 +89,9 @@ const UserStatsDashboard = ({ userId = null }) => {
           <StatCard
             icon={Target}
             title="Average Score"
-            value={userStats.averageScore ? userStats.averageScore.toFixed(1) : '0.0'}
+            value={
+              userStats.averageScore ? userStats.averageScore.toFixed(1) : "0.0"
+            }
             color="purple"
           />
           <StatCard
@@ -101,7 +103,7 @@ const UserStatsDashboard = ({ userId = null }) => {
           <StatCard
             icon={TrendingUp}
             title="Global Rank"
-            value={rank ? `#${rank}` : 'Unranked'}
+            value={rank ? `#${rank}` : "Unranked"}
             color="red"
           />
         </div>
@@ -110,8 +112,8 @@ const UserStatsDashboard = ({ userId = null }) => {
         {quizBreakdown && quizBreakdown.length > 0 ? (
           <QuizBreakdownTable quizBreakdown={quizBreakdown} />
         ) : (
-          <EmptyState 
-            isOwnStats={isOwnStats} 
+          <EmptyState
+            isOwnStats={isOwnStats}
             hasSubmissions={userStats.totalSubmissions > 0}
           />
         )}

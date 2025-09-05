@@ -48,12 +48,10 @@ const signupUser = async (req, res) => {
   } catch (error) {
     console.error("Signup Request Error:", error);
     if (error.message === "Could not send OTP email.") {
-      return res
-        .status(500)
-        .json({
-          message:
-            "Failed to send OTP email. Please ensure server email credentials are correct.",
-        });
+      return res.status(500).json({
+        message:
+          "Failed to send OTP email. Please ensure server email credentials are correct.",
+      });
     }
     res.status(500).json({ message: "Server error during signup request." });
   }
@@ -73,11 +71,9 @@ const verifyOtpAndCreateUser = async (req, res) => {
 
     if (!tempUser || Date.now() > tempUser.expires) {
       if (tempUser) delete tempUserStore[email]; // Clean up expired entry
-      return res
-        .status(400)
-        .json({
-          message: "OTP is invalid or has expired. Please sign up again.",
-        });
+      return res.status(400).json({
+        message: "OTP is invalid or has expired. Please sign up again.",
+      });
     }
 
     // Check if the submitted OTP matches the stored OTP
@@ -97,12 +93,10 @@ const verifyOtpAndCreateUser = async (req, res) => {
     delete tempUserStore[email];
 
     if (user) {
-      res
-        .status(201)
-        .json({
-          message:
-            "Account verified and created successfully! You can now log in.",
-        });
+      res.status(201).json({
+        message:
+          "Account verified and created successfully! You can now log in.",
+      });
     } else {
       res
         .status(400)

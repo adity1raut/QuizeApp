@@ -9,7 +9,8 @@ const AnswerStatus = ({ answeredCount, totalQuestions }) => {
           <BarChart3 className="h-5 w-5 mr-2 text-blue-400" />
           <span>
             <span className="font-semibold text-white">{answeredCount}</span> of{" "}
-            <span className="font-semibold text-white">{totalQuestions}</span> questions answered
+            <span className="font-semibold text-white">{totalQuestions}</span>{" "}
+            questions answered
           </span>
         </div>
 
@@ -24,7 +25,7 @@ const AnswerStatus = ({ answeredCount, totalQuestions }) => {
               <span>Unanswered</span>
             </div>
           </div>
-          
+
           {answeredCount === totalQuestions && (
             <div className="bg-green-900/30 text-green-300 px-3 py-1.5 rounded-lg flex items-center text-sm">
               <CheckCircle className="h-4 w-4 mr-1" />

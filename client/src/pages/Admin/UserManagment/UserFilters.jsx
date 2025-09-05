@@ -1,5 +1,5 @@
-import React from 'react';
-import { Search } from 'lucide-react';
+import React from "react";
+import { Search } from "lucide-react";
 
 const UserFilters = ({
   search,
@@ -9,7 +9,7 @@ const UserFilters = ({
   sortBy,
   sortOrder,
   setSortBy,
-  setSortOrder
+  setSortOrder,
 }) => {
   return (
     <div className="bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
@@ -41,7 +41,7 @@ const UserFilters = ({
             className="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors"
             value={`${sortBy}-${sortOrder}`}
             onChange={(e) => {
-              const [field, order] = e.target.value.split('-');
+              const [field, order] = e.target.value.split("-");
               setSortBy(field);
               setSortOrder(order);
             }}

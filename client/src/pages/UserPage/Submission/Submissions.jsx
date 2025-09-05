@@ -13,7 +13,7 @@ import {
   Clock,
   FileText,
   User,
-  Activity
+  Activity,
 } from "lucide-react";
 
 const Submissions = () => {
@@ -69,7 +69,9 @@ const Submissions = () => {
           <div className="text-red-400 mb-4">
             <Activity size={48} className="mx-auto" />
           </div>
-          <h3 className="text-lg font-semibold text-white mb-2">Error Loading Submissions</h3>
+          <h3 className="text-lg font-semibold text-white mb-2">
+            Error Loading Submissions
+          </h3>
           <p className="text-gray-400 mb-4">{error}</p>
           <button
             onClick={fetchSubmissions}
@@ -108,9 +110,12 @@ const Submissions = () => {
         {submissions.length === 0 ? (
           <div className="bg-gray-800 rounded-lg border border-gray-700 shadow-sm p-12 text-center">
             <BookOpen size={48} className="mx-auto text-gray-500 mb-4" />
-            <h3 className="text-lg font-semibold text-white mb-2">No Submissions Yet</h3>
+            <h3 className="text-lg font-semibold text-white mb-2">
+              No Submissions Yet
+            </h3>
             <p className="text-gray-400 mb-6">
-              You haven't submitted any quizzes yet. Take your first quiz to see your results here.
+              You haven't submitted any quizzes yet. Take your first quiz to see
+              your results here.
             </p>
             <Link
               to="/"
@@ -126,7 +131,8 @@ const Submissions = () => {
               <div className="flex items-center">
                 <BarChart3 className="text-gray-400 mr-3" size={24} />
                 <h2 className="text-xl font-semibold text-white">
-                  {submissions.length} {submissions.length === 1 ? "Submission" : "Submissions"}
+                  {submissions.length}{" "}
+                  {submissions.length === 1 ? "Submission" : "Submissions"}
                 </h2>
               </div>
             </div>
@@ -155,13 +161,17 @@ const Submissions = () => {
                   {submissions.map((submission) => (
                     <tr key={submission._id} className="hover:bg-gray-750">
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-white">{submission.quiz.title}</div>
+                        <div className="text-sm font-medium text-white">
+                          {submission.quiz.title}
+                        </div>
                         <div className="text-sm text-gray-400 mt-1 md:hidden">
                           {new Date(submission.createdAt).toLocaleDateString()}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-bold ${getScoreBgColor(submission.score)} ${getScoreColor(submission.score)}`}>
+                        <div
+                          className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-bold ${getScoreBgColor(submission.score)} ${getScoreColor(submission.score)}`}
+                        >
                           {submission.score}%
                         </div>
                       </td>

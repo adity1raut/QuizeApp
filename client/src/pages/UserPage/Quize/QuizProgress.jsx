@@ -1,6 +1,11 @@
 import React from "react";
 
-const QuizProgress = ({ currentQuestion, totalQuestions, answers, onQuestionNav }) => {
+const QuizProgress = ({
+  currentQuestion,
+  totalQuestions,
+  answers,
+  onQuestionNav,
+}) => {
   const progress = ((currentQuestion + 1) / totalQuestions) * 100;
 
   return (
@@ -19,7 +24,7 @@ const QuizProgress = ({ currentQuestion, totalQuestions, answers, onQuestionNav 
           style={{ width: `${progress}%` }}
         ></div>
       </div>
-      
+
       {/* Question navigation dots */}
       <div className="flex justify-center space-x-2">
         {Array.from({ length: totalQuestions }).map((_, index) => (
@@ -33,7 +38,7 @@ const QuizProgress = ({ currentQuestion, totalQuestions, answers, onQuestionNav 
                   ? "bg-blue-400"
                   : "bg-gray-600 hover:bg-gray-500"
             }`}
-            title={`Question ${index + 1}: ${answers[index] ? 'Answered' : 'Unanswered'}`}
+            title={`Question ${index + 1}: ${answers[index] ? "Answered" : "Unanswered"}`}
           />
         ))}
       </div>

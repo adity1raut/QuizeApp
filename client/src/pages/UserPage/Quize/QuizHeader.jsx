@@ -5,7 +5,7 @@ const QuizHeader = ({ quiz, timeRemaining, onBack }) => {
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
   return (
@@ -27,17 +27,21 @@ const QuizHeader = ({ quiz, timeRemaining, onBack }) => {
             </h1>
             <p className="text-gray-400">{quiz.description}</p>
           </div>
-          
+
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="flex items-center text-gray-300 bg-gray-700/50 px-3 py-2 rounded-lg">
               <Clock className="h-5 w-5 mr-2 text-blue-400" />
               <span>{quiz.questions.length} questions</span>
             </div>
-            
+
             {timeRemaining !== null && (
-              <div className={`flex items-center px-3 py-2 rounded-lg ${
-                timeRemaining < 60 ? 'bg-red-900/30 text-red-300' : 'bg-blue-900/30 text-blue-300'
-              }`}>
+              <div
+                className={`flex items-center px-3 py-2 rounded-lg ${
+                  timeRemaining < 60
+                    ? "bg-red-900/30 text-red-300"
+                    : "bg-blue-900/30 text-blue-300"
+                }`}
+              >
                 <Clock className="h-5 w-5 mr-2" />
                 <span className="font-mono">{formatTime(timeRemaining)}</span>
               </div>

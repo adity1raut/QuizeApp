@@ -1,33 +1,38 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
-import { useAuth } from '../../../contexts/AuthContext';
-import ScoreChip from './ScoreChip';
+import React, { useEffect } from "react";
+import axios from "axios";
+import { useAuth } from "../../../contexts/AuthContext";
+import ScoreChip from "./ScoreChip";
 
-const QuizLeaderboard = ({ 
-  selectedQuiz, 
-  setSelectedQuiz, 
-  quizzes, 
-  limit, 
-  loading, 
-  quizLeaderboard, 
-  setError, 
-  setLoading 
+const QuizLeaderboard = ({
+  selectedQuiz,
+  setSelectedQuiz,
+  quizzes,
+  limit,
+  loading,
+  quizLeaderboard,
+  setError,
+  setLoading,
 }) => {
   const { logout } = useAuth();
 
   const fetchQuizLeaderboard = async () => {
     if (!selectedQuiz) return;
-    
+
     setLoading(true);
-    setError('');
+    setError("");
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get(`/api/admin/leaderboard/quiz/${selectedQuiz}?limit=${limit}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `/api/admin/leaderboard/quiz/${selectedQuiz}?limit=${limit}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       setQuizLeaderboard(response.data.leaderboard);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to fetch quiz leaderboard');
+      setError(
+        err.response?.data?.message || "Failed to fetch quiz leaderboard",
+      );
     } finally {
       setLoading(false);
     }
@@ -40,33 +45,35 @@ const QuizLeaderboard = ({
   }, [selectedQuiz, limit]);
 
   const getRankColor = (rank) => {
-    if (rank === 1) return 'bg-yellow-500/20';
-    if (rank === 2) return 'bg-gray-400/20';
-    if (rank === 3) return 'bg-amber-700/20';
-    return 'bg-gray-800 hover:bg-gray-700/50';
+    if (rank === 1) return "bg-yellow-500/20";
+    if (rank === 2) return "bg-gray-400/20";
+    if (rank === 3) return "bg-amber-700/20";
+    return "bg-gray-800 hover:bg-gray-700/50";
   };
 
   const getRankBadgeColor = (rank) => {
-    if (rank === 1) return 'bg-yellow-500';
-    if (rank === 2) return 'bg-gray-400';
-    if (rank === 3) return 'bg-amber-700';
-    return 'bg-gray-600';
+    if (rank === 1) return "bg-yellow-500";
+    if (rank === 2) return "bg-gray-400";
+    if (rank === 3) return "bg-amber-700";
+    return "bg-gray-600";
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   return (
     <>
-      <h2 className="text-2xl font-semibold text-blue-400 mb-4">Quiz Leaderboard</h2>
-      
+      <h2 className="text-2xl font-semibold text-blue-400 mb-4">
+        Quiz Leaderboard
+      </h2>
+
       <div className="bg-gray-800 p-4 rounded-lg shadow-md mb-6">
         <div className="relative">
           <select
@@ -83,12 +90,16 @@ const QuizLeaderboard = ({
           </select>
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
             <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+              <path
+                fillRule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
             </svg>
           </div>
         </div>
       </div>
-      
+
       {loading ? (
         <div className="flex justify-center my-8">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
@@ -99,27 +110,48 @@ const QuizLeaderboard = ({
             <table className="min-w-full">
               <thead className="bg-gray-700">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Rank</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">User</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Best Score</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">Attempts</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Best Score Date</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Rank
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    User
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Best Score
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Attempts
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                    Best Score Date
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-700">
                 {quizLeaderboard.map((user) => (
                   <tr key={user._id} className={getRankColor(user.rank)}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`${getRankBadgeColor(user.rank)} text-white px-3 py-1 rounded-full text-sm font-semibold`}>
+                      <span
+                        className={`${getRankBadgeColor(user.rank)} text-white px-3 py-1 rounded-full text-sm font-semibold`}
+                      >
                         #{user.rank}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{user.username}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
-                      <ScoreChip score={user.bestScore} label={`${user.bestScore}%`} />
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                      {user.username}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-white text-right">{user.totalAttempts}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{formatDate(user.bestScoreDate)}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
+                      <ScoreChip
+                        score={user.bestScore}
+                        label={`${user.bestScore}%`}
+                      />
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-white text-right">
+                      {user.totalAttempts}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                      {formatDate(user.bestScoreDate)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -129,7 +161,9 @@ const QuizLeaderboard = ({
       ) : (
         <div className="bg-gray-800 p-8 rounded-lg shadow-lg text-center">
           <p className="text-gray-400">
-            {selectedQuiz ? 'No data available for this quiz' : 'Please select a quiz to view its leaderboard'}
+            {selectedQuiz
+              ? "No data available for this quiz"
+              : "Please select a quiz to view its leaderboard"}
           </p>
         </div>
       )}

@@ -1,11 +1,11 @@
-import React from 'react';
-import { BarChart3, Calendar } from 'lucide-react';
+import React from "react";
+import { BarChart3, Calendar } from "lucide-react";
 
 const formatDate = (dateString) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
+  return new Date(dateString).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
   });
 };
 
@@ -15,7 +15,9 @@ const QuizBreakdownTable = ({ quizBreakdown }) => {
       <div className="px-6 py-4 border-b border-gray-700">
         <div className="flex items-center">
           <BarChart3 className="text-gray-400 mr-3" size={24} />
-          <h2 className="text-xl font-semibold text-white">Quiz Performance Breakdown</h2>
+          <h2 className="text-xl font-semibold text-white">
+            Quiz Performance Breakdown
+          </h2>
         </div>
       </div>
       <div className="overflow-x-auto">
@@ -43,16 +45,22 @@ const QuizBreakdownTable = ({ quizBreakdown }) => {
             {quizBreakdown.map((quiz) => (
               <tr key={quiz._id} className="hover:bg-gray-750">
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-white">{quiz.quizTitle}</div>
+                  <div className="text-sm font-medium text-white">
+                    {quiz.quizTitle}
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-300">{quiz.attempts}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-green-400">{quiz.bestScore}</div>
+                  <div className="text-sm font-medium text-green-400">
+                    {quiz.bestScore}
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-300">{quiz.averageScore.toFixed(1)}</div>
+                  <div className="text-sm text-gray-300">
+                    {quiz.averageScore.toFixed(1)}
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-300 flex items-center">

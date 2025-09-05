@@ -8,7 +8,9 @@ const ErrorMessage = ({ error, onReturnHome }) => {
         <div className="text-red-400 mb-4">
           <Activity size={48} className="mx-auto" />
         </div>
-        <h3 className="text-lg font-semibold text-white mb-2">Error Loading Quiz</h3>
+        <h3 className="text-lg font-semibold text-white mb-2">
+          Error Loading Quiz
+        </h3>
         <p className="text-gray-400 mb-4">{error}</p>
         <button
           onClick={onReturnHome}
