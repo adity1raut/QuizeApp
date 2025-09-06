@@ -1,4 +1,4 @@
-import Submission from "../../models/SubmissionSchema.js";
+import Submission from "../../../models/SubmissionSchema.js";
 import mongoose from "mongoose";
 
 export const getGlobalLeaderboard = async (req, res) => {

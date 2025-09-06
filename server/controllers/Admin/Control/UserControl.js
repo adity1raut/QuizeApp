@@ -1,5 +1,5 @@
-import User from "../../models/UserSchema.js";
-import Submission from "../../models/SubmissionSchema.js";
+import User from "../../../models/UserSchema.js";
+import Submission from "../../../models/SubmissionSchema.js";
 
 export const getUsers = async (req, res) => {
   try {

@@ -1,5 +1,5 @@
-import Quiz from "../../models/QuizSchema.js";
-import Question from "../../models/QuestionSchema.js";
+import Quiz from "../../../models/QuizSchema.js";
+import Question from "../../../models/QuestionSchema.js";
 
 const createQuiz = async (req, res) => {
   try {

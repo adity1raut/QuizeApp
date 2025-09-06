@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
-import { User, Activity } from "lucide-react";
+import { User, Activity , Trophy , Target , Award , TrendingUp} from "lucide-react";
 import StatCard from "./StatCard";
 import StatsHeader from "./StatsHeader";
 import QuizBreakdownTable from "./QuizBreakdownTable";
