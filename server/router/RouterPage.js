@@ -23,7 +23,7 @@ import {
   updateQuestion,
   deleteQuestion,
   getQuizStats,
-} from "../controllers/Admin/AdminControl.js";
+} from "../controllers/Admin/Control/AdminControl.js";
 
 import {
   getActiveQuizzes,
@@ -37,14 +37,14 @@ import {
   getGlobalLeaderboard,
   getQuizLeaderboard,
   getUserStats,
-} from "../controllers/Admin/leaderboardController.js";
+} from "../controllers/Admin/Lerderboard/leaderboardController.js";
 
 import {
   getUsers,
   updateUserRole,
   deleteUser,
   getAnalytics,
-} from "../controllers/Admin/UserControl.js";
+} from "../controllers/Admin/Control/UserControl.js";
 
 const router = express.Router();
 
