@@ -1,0 +1,5 @@
+
+
+# Add 'ci' label for GitHub Actions workflows
+'ci':
+  - .github/workflows/**
