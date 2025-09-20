@@ -2,7 +2,7 @@ import React from "react";
 import { BarChart3 } from "lucide-react";
 import QuizCard from "./QuizCard";
 
-const QuizGrid = ({ quizzes, filter }) => {
+const QuizGrid = ({ quizzes }) => {
   return (
     <>
       <div className="flex items-center justify-between mb-6">
